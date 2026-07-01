@@ -91,6 +91,11 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
 }
 .content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
 .content-card p:last-child { margin-bottom: 0; }
+.content-card .about-shot {
+  border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden;
+  margin-bottom: 1rem; background: #000;
+}
+.content-card .about-shot img { width: 100%; display: block; }
 
 /* TAGS */
 .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
@@ -158,6 +163,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
   <div class="section">
     <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
     <div class="content-card">
+      <div class="about-shot"><img src="img/thumb-diffie-hellman.jpg" alt="Diagram of Alice and Bob performing a Diffie-Hellman key exchange to arrive at the same shared secret"></div>
       <p>This project focused on understanding and implementing the Diffie-Hellman Key Agreement protocol. It demonstrated how two parties can securely generate and share an encryption key over an insecure network using mathematical principles and OpenSSL. The project combined the theory behind public-key cryptography with hands-on key generation, exchange, and verification to show how secure communications are established in real-world applications.</p>
       <div class="tag-row">
         <span class="tag">OpenSSL</span><span class="tag">Cryptography</span><span class="tag">Key Exchange</span><span class="tag">Modular Arithmetic</span><span class="tag">Public-Key Crypto</span>
