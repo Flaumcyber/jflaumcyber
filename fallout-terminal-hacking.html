@@ -143,6 +143,114 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
 
 .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
 
+/* ── EMBEDDED TERMINAL GAME ── */
+:root { --gold: #E3B341; }
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.82; }
+  94% { opacity: 1; }
+  96% { opacity: 0.88; }
+  97% { opacity: 1; }
+}
+@keyframes scanmove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+@keyframes phosphorPulse {
+  0%, 100% { text-shadow: 0 0 6px rgba(93,202,165,0.55), 0 0 14px rgba(93,202,165,0.25); }
+  50% { text-shadow: 0 0 9px rgba(93,202,165,0.8), 0 0 20px rgba(93,202,165,0.4); }
+}
+.felt {
+  background: radial-gradient(ellipse at top, #0a4a3c 0%, #04342C 70%);
+  border: 1px solid #0F6E56; border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem; position: relative; overflow: hidden;
+}
+.felt::before {
+  content: '♠ ♥ ♦ ♣'; position: absolute; top: 10px; right: 18px;
+  font-size: 13px; letter-spacing: 6px; color: rgba(225,245,238,0.15);
+  font-family: var(--sans); font-weight: 800;
+}
+.felt.crt { box-shadow: inset 0 0 120px rgba(0,0,0,0.65), inset 0 0 40px rgba(0,0,0,0.5), 0 0 0 1px #0F6E56; animation: flicker 6s infinite; }
+.felt.crt::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: var(--radius-lg);
+  background: repeating-linear-gradient(to bottom, rgba(225,245,238,0.05) 0px, rgba(225,245,238,0.05) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode: overlay; animation: scanmove 6s linear infinite;
+}
+.felt.crt .table-title, .felt.crt .area-label span:first-child { animation: phosphorPulse 3.2s ease-in-out infinite; }
+.table-title { font-family: var(--mono); font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; text-align: center; margin-bottom: 1.5rem; }
+.area { margin-bottom: 1.1rem; }
+.area-label { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: #9FE1CB; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.score-pill { font-family: var(--mono); font-size: 13px; color: #04342C; background: #E1F5EE; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+.game-result { font-family: var(--mono); font-size: 14px; color: var(--gold); text-align: center; min-height: 20px; margin: 0.25rem 0 1rem; }
+.game-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.game-btn {
+  font-family: var(--mono); font-size: 13px; background: transparent;
+  border: 0.5px solid var(--green-glow); color: var(--green-glow);
+  padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.game-btn:hover:not(:disabled) { background: var(--green-glow); color: #04342C; }
+.game-btn.primary { border-color: var(--gold); color: var(--gold); }
+.game-btn.primary:hover:not(:disabled) { background: var(--gold); color: #04342C; }
+.game-stats { font-family: var(--mono); font-size: 11px; color: #9FE1CB; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; padding-top: 1.1rem; border-top: 0.5px solid rgba(225,245,238,0.15); }
+.game-stats span b { color: var(--gold); }
+.house-line { font-family: var(--mono); font-size: 10px; color: rgba(225,245,238,0.4); text-align: center; margin-top: 10px; letter-spacing: 1px; }
+
+/* ── PIP-BOY MONITOR ── */
+.pipboy-monitor {
+  background: #0d0d0c; border: 6px solid #2a2a28; border-radius: 26px;
+  padding: 20px; box-shadow: 0 14px 34px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.04);
+  position: relative;
+}
+.pipboy-screen {
+  background: #02120C; border-radius: 14px; padding: 18px 18px 14px;
+  position: relative; overflow: hidden; box-shadow: inset 0 0 70px rgba(0,0,0,0.85);
+}
+.pipboy-screen.crt { animation: flicker 6s infinite; }
+.pipboy-screen.crt::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(225,245,238,0.05) 0px, rgba(225,245,238,0.05) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode: overlay; animation: scanmove 6s linear infinite;
+}
+.pipboy-screen::before {
+  content: ''; position: absolute; top: -40%; right: -25%; width: 70%; height: 120%;
+  background: radial-gradient(circle, rgba(120,255,190,0.13), transparent 60%); pointer-events: none;
+}
+.pb-header { font-family: var(--mono); font-size: 12px; color: #6FE3B0; text-transform: uppercase; letter-spacing: 1px; line-height: 1.7; }
+.pb-attempts { font-family: var(--mono); font-size: 12px; color: #9FE1CB; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; margin: 10px 0 14px; }
+.pips { display: inline-flex; gap: 5px; }
+.pip { width: 9px; height: 9px; background: #6FE3B0; box-shadow: 0 0 5px rgba(111,227,176,0.8); }
+.pip.empty { background: rgba(111,227,176,0.15); box-shadow: none; }
+
+.pipboy-body { display: flex; flex-wrap: wrap; gap: 18px; }
+.pipboy-col { flex: 1 1 220px; min-width: 190px; }
+.term-row { display: flex; gap: 8px; white-space: nowrap; }
+.term-addr { font-family: var(--mono); font-size: 10.5px; color: rgba(111,227,176,0.45); line-height: 1.85; }
+.term-chars { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.5px; line-height: 1.85; }
+.tc { padding: 0 1px; border-radius: 2px; cursor: default; color: rgba(159,225,203,0.85); }
+.tc.junk { cursor: pointer; }
+.tc.junk:hover, .tc.junk.hl { background: rgba(93,202,165,0.18); color: #d9ffe9; }
+.tc.word { cursor: pointer; color: #eafff2; font-weight: 700; }
+.tc.word:hover:not(.disabled), .tc.word.hl:not(.disabled) { background: rgba(93,202,165,0.4); }
+.tc.word.disabled { opacity: 0.32; cursor: default; }
+.tc.word.disabled.dud { text-decoration: line-through; }
+.tc.word.correct { color: #8fffc0; background: rgba(143,255,192,0.2); text-shadow: 0 0 6px rgba(143,255,192,0.8); }
+.tc.bracket { cursor: pointer; color: #ffe27a; font-weight: 700; }
+.tc.bracket:hover, .tc.bracket.hl { background: rgba(255,226,122,0.35); }
+.tc.bracket.used { opacity: 0.25; cursor: default; }
+
+.pipboy-feed {
+  flex: 1 1 220px; min-width: 190px; max-height: 340px; overflow-y: auto;
+  border-left: 1px dashed rgba(111,227,176,0.25); padding-left: 14px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.85;
+}
+.pipboy-feed div.f-info { color: #9FE1CB; }
+.pipboy-feed div.f-good { color: #8fffc0; }
+.pipboy-feed div.f-bad { color: #ff9a8a; }
+.pipboy-feed::-webkit-scrollbar { width: 6px; }
+.pipboy-feed::-webkit-scrollbar-thumb { background: rgba(111,227,176,0.3); border-radius: 3px; }
+
 @media (max-width: 480px) {
   .container { padding: 1.5rem 1rem 4rem; }
   .terminal-body { padding: 1.25rem; }
@@ -184,6 +292,36 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
         <span class="tag">Python</span><span class="tag">CLI Game</span><span class="tag">String Matching</span><span class="tag">Randomization</span><span class="tag">Game Logic</span>
       </div>
     </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// play it live</span><div class="section-line"></div></div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:1rem;">This is a JavaScript port of the Python game below, styled after the real Pip-Boy terminal display. Click any highlighted <strong>word</strong> to guess it — Likeness tells you how many characters matched in the exact position. Hidden in the junk are matching <strong>bracket pairs</strong> — <code>&lt; &gt;</code>, <code>( )</code>, <code>[ ]</code>, <code>{ }</code> — click either symbol of an intact pair to remove a dud word or reset your attempts.</p>
+
+    <div class="pipboy-monitor">
+      <div class="pipboy-screen crt">
+        <div class="pb-header">
+          <div>ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>
+          <div>ENTER PASSWORD NOW</div>
+        </div>
+        <div class="pb-attempts">
+          <span id="rcAttemptsLabel">4 ATTEMPT(S) LEFT:</span>
+          <span class="pips" id="rcPips"></span>
+        </div>
+        <div class="pipboy-body" id="rcDump"></div>
+        <div class="pipboy-feed" id="rcFeed"></div>
+      </div>
+    </div>
+
+    <div class="game-controls" style="margin-top:1.1rem;">
+      <button class="game-btn primary" id="rcNewGame">New Game</button>
+    </div>
+    <div class="game-stats">
+      <span>Played: <b id="rcStatPlayed">0</b></span>
+      <span>Won: <b id="rcStatWon">0</b></span>
+      <span>Lost: <b id="rcStatLost">0</b></span>
+    </div>
+    <div class="house-line">// click a word to guess it · click a bracket pair to remove a dud or reset your attempts · every character on screen is selectable</div>
   </div>
 
   <div class="section">
@@ -376,6 +514,869 @@ if __name__ == "__main__":
     </div>
   </div>
 
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// advanced version</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>This is a second, far more faithful recreation of the terminal — a real command-line program using Python's <code>curses</code> library instead of a simple text loop. It supports 5 difficulty levels (word length 4 through 15), lays words and bracket pairs out across a real two-column x 17-row grid, tracks a cursor you move with the arrow keys, and reproduces the exact bracket mechanic: one bracket per puzzle is reserved to fully replenish your attempts, and the rest remove a dud word — replacing it with dots, exactly like the original games.</p>
+      <div class="tag-row">
+        <span class="tag">Python</span><span class="tag">curses</span><span class="tag">CLI Game</span><span class="tag">argparse</span><span class="tag">Difficulty Scaling</span><span class="tag">Grid Layout</span>
+      </div>
+    </div>
+
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;margin:1.25rem 0 1rem;">What running it actually looks like — a live-navigable version of the same garbled memory dump, with the currently selected word or bracket shown in reverse video and a scrolling output log in a third column:</p>
+
+    <div class="pipboy-monitor">
+      <div class="pipboy-screen crt">
+        <div class="pb-header">
+          <div>ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>
+          <div>ENTER PASSWORD NOW</div>
+        </div>
+        <div class="pb-attempts">
+          <span>4 ATTEMPT(S) LEFT:</span>
+          <span class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip empty"></span></span>
+        </div>
+        <div class="pipboy-body">
+          <div class="pipboy-col">
+            <div class="term-row"><span class="term-addr">0xA410</span><span class="term-chars">!@#$<span class="tc word correct">DATABASE</span>^&amp;*_</span></div>
+            <div class="term-row"><span class="term-addr">0xA420</span><span class="term-chars">;:,.?/~*<span class="tc word">FIREWALL</span></span></div>
+            <div class="term-row"><span class="term-addr">0xA430</span><span class="term-chars">#^&amp;*_-+|<span class="tc word">CONTROL</span>!=</span></div>
+            <div class="term-row"><span class="term-addr">0xA440</span><span class="term-chars">(<span class="tc bracket">{</span><span class="tc word">FRAMEWORK</span><span class="tc bracket">}</span>)#$%^</span></div>
+            <div class="term-row"><span class="term-addr">0xA450</span><span class="term-chars"><span class="tc word disabled dud">...............</span></span></div>
+            <div class="term-row"><span class="term-addr">0xA460</span><span class="term-chars"><span class="tc bracket">&lt;</span>@$PROTOCOL!*<span class="tc bracket">&gt;</span></span></div>
+          </div>
+          <div class="pipboy-col">
+            <div class="term-row"><span class="term-addr">0xA490</span><span class="term-chars">%^&amp;*<span class="tc word">ENCRYPTS</span>_-+=</span></div>
+            <div class="term-row"><span class="term-addr">0xA4A0</span><span class="term-chars"><span class="tc bracket">[</span><span class="tc bracket">]</span><span class="tc word">DOWNLOAD</span>#$%^&amp;</span></div>
+            <div class="term-row"><span class="term-addr">0xA4B0</span><span class="term-chars"><span class="tc word">ARCHIVE</span>!@#$%^&amp;*_</span></div>
+            <div class="term-row"><span class="term-addr">0xA4C0</span><span class="term-chars">;:,.?~*<span class="tc word">INTERFACE</span></span></div>
+            <div class="term-row"><span class="term-addr">0xA4D0</span><span class="term-chars"><span class="tc word disabled dud">...............</span></span></div>
+            <div class="term-row"><span class="term-addr">0xA4E0</span><span class="term-chars">#$%^<span class="tc bracket">{</span><span class="tc bracket">}</span>&amp;*_-+=;:,.</span></div>
+          </div>
+          <div class="pipboy-feed">
+            <div class="f-info">&gt;DATABASE</div>
+            <div class="f-bad">&gt;Entry denied.</div>
+            <div class="f-bad">&gt;4/9 correct.</div>
+            <div class="f-good">&gt;Dud removed.</div>
+            <div class="f-info">&gt;FIREWALL</div>
+            <div class="f-bad">&gt;Entry denied.</div>
+            <div class="f-bad">&gt;6/9 correct.</div>
+            <div class="f-good">&gt;Attempts reset.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="house-line" style="margin-top:8px;">// static preview — arrow keys move the cursor, Enter selects a word or bracket, run it in a real terminal to play</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// advanced walkthrough</span><div class="section-line"></div></div>
+
+    <div class="step-list">
+
+      <div class="step-card">
+        <div class="step-num">step 01</div>
+        <div class="step-title">Difficulty config &amp; length-based word lists</div>
+        <div class="step-body">Instead of one fixed word pool, <code>WORD_LISTS</code> is a dict keyed by word length (4 through 15), and <code>DIFFICULTY_CONFIG</code> maps each of the 5 difficulty levels to a length range, a word count, an attempt count, and whether wrong guesses can retry. <code>_generate_words()</code> pulls every word in the level's length range, sampling gibberish to pad the list out if a length bucket runs short.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">step 02</div>
+        <div class="step-title">Building the two-column grid</div>
+        <div class="step-body"><code>_generate_grid()</code> builds 17 rows x 2 columns of <code>GridLine</code> objects. It fills every cell with junk first, then picks random, non-overlapping positions for each word and decides which of those lines also get a bracket sequence, using <code>_create_line_content()</code> and <code>_create_line_content_with_both()</code> to weave the word and/or bracket pair into 16 characters of junk without letting them collide.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">step 03</div>
+        <div class="step-title">Cursor-aware highlighting</div>
+        <div class="step-body"><code>get_current_highlight()</code>, <code>get_current_word()</code>, and <code>get_current_bracket()</code> all look at the line under the cursor and figure out whether it's sitting on a live word, a live bracket, or plain junk — that's what lets the curses renderer draw the correct reverse-video highlight and lets Enter know whether to submit a guess or activate a bracket.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">step 04</div>
+        <div class="step-title">Guessing &amp; lockout logic</div>
+        <div class="step-body"><code>make_guess()</code> compares the guess to the password character-by-character with <code>count_matches()</code>, decrements <code>attempts_left</code>, and appends formatted lines to <code>output_history</code>. On very easy difficulty (<code>retry: True</code>) the terminal never fully locks; every other level locks out once attempts hit zero.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">step 05</div>
+        <div class="step-title">Bracket activation — dud removal vs. replenish</div>
+        <div class="step-body"><code>activate_bracket()</code> is the heart of the authentic mechanic: exactly one bracket per puzzle is reserved to fully replenish <code>attempts_left</code> (tracked with <code>replenish_bracket_used</code>), and every other bracket removes a random still-active dud word, overwriting its characters with dots so it's visibly gone and no longer guessable.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">step 06</div>
+        <div class="step-title">Rendering &amp; the input loop</div>
+        <div class="step-body"><code>draw_header()</code> and <code>draw_grid()</code> paint the header, attempt blocks, both content columns, and a third output column using <code>curses.A_REVERSE</code> for the active highlight. The main loop in <code>main()</code> reads arrow keys to move <code>cursor_row</code> / <code>cursor_col</code> between and within the two columns, and Enter either submits a guess or activates a bracket depending on what's under the cursor.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// advanced full code</span><div class="section-line"></div></div>
+    <div class="code-frame-wrap">
+      <div class="code-toolbar">
+        <span class="code-toolbar-label">// fallout_hacking_advanced.py</span>
+        <button class="code-btn" id="copyBtn2" onclick="copyCode2()">// copy code</button>
+      </div>
+      <div class="code-embed">
+<pre id="codeBlock2">#!/usr/bin/env python3
+&quot;&quot;&quot;
+Fallout 4 Hacking Mini-Game Recreation
+A command-line playable version using curses - Pixel perfect recreation
+&quot;&quot;&quot;
+
+import curses
+import random
+import argparse
+import sys
+from typing import List, Tuple, Optional, Set
+
+# Word lists for different lengths
+WORD_LISTS = {
+    4: [
+        &#x27;BOOT&#x27;, &#x27;CORE&#x27;, &#x27;DATA&#x27;, &#x27;DISK&#x27;, &#x27;FILE&#x27;, &#x27;HOST&#x27;, &#x27;KEYS&#x27;, &#x27;LINK&#x27;, &#x27;LOAD&#x27;, &#x27;LOCK&#x27;,
+        &#x27;NODE&#x27;, &#x27;PATH&#x27;, &#x27;PORT&#x27;, &#x27;ROOT&#x27;, &#x27;SAVE&#x27;, &#x27;SYNC&#x27;, &#x27;TASK&#x27;, &#x27;TERM&#x27;, &#x27;TIME&#x27;, &#x27;USER&#x27;
+    ],
+
+    5: [
+        &#x27;ADMIN&#x27;, &#x27;ALERT&#x27;, &#x27;ARRAY&#x27;, &#x27;CACHE&#x27;, &#x27;CHAIR&#x27;, &#x27;CLOCK&#x27;, &#x27;DEBUG&#x27;, &#x27;DESKS&#x27;, &#x27;DRIVE&#x27;,
+        &#x27;ERROR&#x27;, &#x27;FILES&#x27;, &#x27;INPUT&#x27;, &#x27;LOGIN&#x27;, &#x27;LOGIC&#x27;, &#x27;LOGOUT&#x27;, &#x27;MOUSE&#x27;, &#x27;POWER&#x27;, &#x27;PRINT&#x27;,
+        &#x27;RESET&#x27;, &#x27;SCREEN&#x27;, &#x27;START&#x27;, &#x27;TABLE&#x27;, &#x27;TIMER&#x27;, &#x27;TOKEN&#x27;, &#x27;TOOLS&#x27;
+    ],
+
+    6: [
+        &#x27;ACCESS&#x27;, &#x27;BACKUP&#x27;, &#x27;BINARY&#x27;, &#x27;BUTTON&#x27;, &#x27;CLIENT&#x27;, &#x27;CONFIG&#x27;, &#x27;CURSOR&#x27;, &#x27;DEVICE&#x27;,
+        &#x27;EDITOR&#x27;, &#x27;EXPORT&#x27;, &#x27;FILTER&#x27;, &#x27;FOLDER&#x27;, &#x27;FORMAT&#x27;, &#x27;IMPORT&#x27;, &#x27;MEMORY&#x27;, &#x27;MODULE&#x27;,
+        &#x27;OUTPUT&#x27;, &#x27;PYTHON&#x27;, &#x27;SCRIPT&#x27;, &#x27;SERVER&#x27;, &#x27;STATUS&#x27;, &#x27;SWITCH&#x27;, &#x27;SYNTAX&#x27;, &#x27;SYSTEM&#x27;
+    ],
+
+    7: [
+        &#x27;ADDRESS&#x27;, &#x27;ARCHIVE&#x27;, &#x27;BATTERY&#x27;, &#x27;COMMAND&#x27;, &#x27;COMPILE&#x27;, &#x27;CONSOLE&#x27;, &#x27;CONTROL&#x27;,
+        &#x27;DEFAULT&#x27;, &#x27;DISPLAY&#x27;, &#x27;EXECUTE&#x27;, &#x27;FIRMWARE&#x27;, &#x27;FUNCTION&#x27;, &#x27;HARDWARE&#x27;, &#x27;KEYBOARD&#x27;,
+        &#x27;MONITOR&#x27;, &#x27;NETWORK&#x27;, &#x27;PROCESS&#x27;, &#x27;PROGRAM&#x27;, &#x27;PROTOCOL&#x27;, &#x27;RESOURCE&#x27;
+    ],
+
+    8: [
+        &#x27;ACTIVATE&#x27;, &#x27;ADAPTERS&#x27;, &#x27;ARGUMENT&#x27;, &#x27;DATABASE&#x27;, &#x27;DOWNLOAD&#x27;, &#x27;EMULATOR&#x27;,
+        &#x27;ENCRYPTS&#x27;, &#x27;FIREWALL&#x27;, &#x27;FRAMEWORK&#x27;, &#x27;INTERFACE&#x27;, &#x27;KEYSTROK&#x27;, &#x27;NOTEBOOK&#x27;,
+        &#x27;OPERATOR&#x27;, &#x27;PIPELINE&#x27;, &#x27;PLATFORM&#x27;, &#x27;RENDERER&#x27;, &#x27;SCHEDULR&#x27;, &#x27;TERMINAL&#x27;
+    ],
+
+    9: [
+        &#x27;ALGORITHM&#x27;, &#x27;AUTHORITY&#x27;, &#x27;AUTOMATED&#x27;, &#x27;BANDWIDTH&#x27;, &#x27;BOOTSTRAP&#x27;,
+        &#x27;COMPRESSION&#x27;, &#x27;CONFIGURE&#x27;, &#x27;CONTROLLER&#x27;, &#x27;DECRYPTED&#x27;, &#x27;DEPENDENT&#x27;,
+        &#x27;FRAMEWORK&#x27;, &#x27;HYPERVIS&#x27;, &#x27;INITIALIZ&#x27;, &#x27;PERMISSION&#x27;, &#x27;PROCESSOR&#x27;
+    ],
+
+    10: [
+        &#x27;APPLICATION&#x27;, &#x27;AUTHENTIC&#x27;, &#x27;BACKUPFILE&#x27;, &#x27;CONFIGURED&#x27;, &#x27;CONNECTION&#x27;,
+        &#x27;CONTROLLER&#x27;, &#x27;DEBUGGERX&#x27;, &#x27;DEVELOPERS&#x27;, &#x27;DOWNLOADED&#x27;, &#x27;ENVIRONMENT&#x27;,
+        &#x27;MAINTENANC&#x27;, &#x27;MULTITHRE&#x27;, &#x27;OPERATIONS&#x27;, &#x27;PERMISSIONS&#x27;, &#x27;VALIDATION&#x27;
+    ],
+
+    11: [
+        &#x27;ACCELERATOR&#x27;, &#x27;AUTHENTICAT&#x27;, &#x27;CONFIGURATION&#x27;, &#x27;CONTINUATION&#x27;,
+        &#x27;DECOMPRESSION&#x27;, &#x27;IMPLEMENTER&#x27;, &#x27;INITIALIZATION&#x27;,
+        &#x27;INTERPRETERS&#x27;, &#x27;MAINTAINERS&#x27;, &#x27;MULTIPLEXING&#x27;
+    ],
+
+  12: [
+        &#x27;AUTHENTICATE&#x27;,   # 12
+        &#x27;CONFIGURABLE&#x27;,   # 12
+        &#x27;CONSTRUCTORS&#x27;,   # 12
+        &#x27;DEVELOPMENT&#x27;,    # 12
+        &#x27;ENCAPSULATE&#x27;,    # 12
+        &#x27;INITIALIZERS&#x27;,   # 12
+        &#x27;MULTITHREAD&#x27;,    # 12
+        &#x27;ORCHESTRATE&#x27;,    # 12
+        &#x27;PERFORMANCE&#x27;,    # 12
+        &#x27;REFACTORING&#x27;,    # 12
+        &#x27;SERIALIZERS&#x27;,    # 12
+        &#x27;TRANSACTIONS&#x27;   # 12
+    ],
+
+    13: [
+        &#x27;AUTHORIZATION&#x27;,  # 13
+        &#x27;DETERMINISTIC&#x27;,  # 13
+        &#x27;IMPLEMENTATION&#x27;,# 13
+        &#x27;INITIALIZATION&#x27;,# 13
+        &#x27;INSTRUMENTATION&#x27;,#13
+        &#x27;MULTITHREADED&#x27;, # 13
+        &#x27;OPTIMIZATION&#x27;,  # 13
+        &#x27;CONFIGURATION&#x27;, # 13
+        &#x27;VIRTUALIZATION&#x27;,# 13
+        &#x27;AUTHENTICATED&#x27;, # 13
+        &#x27;ENCAPSULATION&#x27;, # 13
+        &#x27;SERIALIZATION&#x27;  # 13
+    ],
+
+    14: [
+        &#x27;AUTHENTICATION&#x27;, # 14
+        &#x27;CHARACTERISTIC&#x27;, # 14
+        &#x27;CONFIGURATIONS&#x27;, # 14
+        &#x27;DECOMPRESSION&#x27;, # 14
+        &#x27;IMPLEMENTATIONS&#x27;,#14
+        &#x27;INITIALIZATIONS&#x27;,#14
+        &#x27;MULTIPROCESSING&#x27;,#14
+        &#x27;VIRTUALMACHINE&#x27;, # 14
+        &#x27;AUTHORIZATIONS&#x27;, # 14
+        &#x27;PARALLELIZATION&#x27;,#14
+        &#x27;SERIALIZATIONS&#x27;, # 14
+        &#x27;TRANSMISSIONS&#x27;   # 14
+    ],
+
+    15: [
+        &#x27;AUTHENTICATIONS&#x27;, # 15
+        &#x27;CHARACTERISTICS&#x27;, # 15
+        &#x27;CONFIGURABILITY&#x27;, # 15
+        &#x27;IMPLEMENTATIONAL&#x27;,# 15
+        &#x27;MULTIPROCESSORS&#x27;, # 15
+        &#x27;INITIALIZATIONSS&#x27;,# 15 (intentionally double-S, Fallout-style)
+        &#x27;PARALLELPROCESS&#x27;, # 15
+        &#x27;VIRTUALMACHINES&#x27;, # 15
+        &#x27;AUTHORIZINGKEY&#x27;,  # 15
+        &#x27;SERIALIZINGDATA&#x27;, # 15
+        &#x27;TRANSACTIONLOG&#x27;,  # 15
+        &#x27;ENCRYPTIONBLOCK&#x27;  # 15
+    ]
+}
+
+
+# Special characters for bracket sequences
+BRACKET_CHARS = &#x27;!@#$%^&amp;*()_+-=[]{}|;:,.&lt;&gt;?/~`&#x27;
+HEX_CHARS = &#x27;0123456789ABCDEF&#x27;
+
+DIFFICULTY_CONFIG = {
+    1: {&#x27;name&#x27;: &#x27;VERY EASY&#x27;, &#x27;min_len&#x27;: 4, &#x27;max_len&#x27;: 5, &#x27;word_count&#x27;: 8, &#x27;attempts&#x27;: 5, &#x27;retry&#x27;: True},
+    2: {&#x27;name&#x27;: &#x27;EASY&#x27;, &#x27;min_len&#x27;: 6, &#x27;max_len&#x27;: 8, &#x27;word_count&#x27;: 10, &#x27;attempts&#x27;: 5, &#x27;retry&#x27;: False},
+    3: {&#x27;name&#x27;: &#x27;AVERAGE&#x27;, &#x27;min_len&#x27;: 9, &#x27;max_len&#x27;: 10, &#x27;word_count&#x27;: 12, &#x27;attempts&#x27;: 5, &#x27;retry&#x27;: False},
+    4: {&#x27;name&#x27;: &#x27;HARD&#x27;, &#x27;min_len&#x27;: 11, &#x27;max_len&#x27;: 12, &#x27;word_count&#x27;: 14, &#x27;attempts&#x27;: 5, &#x27;retry&#x27;: False},
+    5: {&#x27;name&#x27;: &#x27;VERY HARD&#x27;, &#x27;min_len&#x27;: 13, &#x27;max_len&#x27;: 15, &#x27;word_count&#x27;: 16, &#x27;attempts&#x27;: 5, &#x27;retry&#x27;: False}
+}
+
+
+class GridLine:
+    def __init__(self, address: str, content: str, word: Optional[str] = None, 
+                 word_start: int = -1, bracket_info: Optional[Tuple[int, int, str]] = None,
+                 is_dud: bool = False, removed: bool = False, bracket_used: bool = False):
+        self.address = address  # Hex address like &quot;0xFA8C&quot;
+        self.content = content  # Full content string
+        self.word = word  # Word embedded in content (if any)
+        self.word_start = word_start  # Starting position of word in content
+        self.bracket_info = bracket_info  # (start, end, bracket_pair) if brackets exist
+        self.is_dud = is_dud  # True if this is a dud word
+        self.removed = removed  # True if this dud has been removed
+        self.bracket_used = bracket_used  # True if bracket has been used
+
+
+class HackingGame:
+    def __init__(self, difficulty: int):
+        self.difficulty = difficulty
+        self.config = DIFFICULTY_CONFIG[difficulty]
+        self.attempts_left = self.config[&#x27;attempts&#x27;]
+        self.max_attempts = self.config[&#x27;attempts&#x27;]
+        self.words = self._generate_words()
+        self.password = random.choice(self.words)
+        self.grid_lines = self._generate_grid()
+        self.cursor_row = 0
+        self.cursor_col = 0
+        self.game_over = False
+        self.won = False
+        self.locked_out = False
+        self.last_guess = None
+        self.last_match_count = 0
+        self.dud_words = set()
+        self.output_history = []
+        self.replenish_bracket_used = False
+
+    def _generate_words(self) -&gt; List[str]:
+        word_count = self.config[&#x27;word_count&#x27;]
+        available_words = []
+        
+        # Get all word lengths for this difficulty
+        min_len = self.config[&#x27;min_len&#x27;]
+        max_len = self.config[&#x27;max_len&#x27;]
+        
+        # Collect words from all appropriate length lists
+        for length in range(min_len, max_len + 1):
+            if length in WORD_LISTS:
+                available_words.extend([w.upper() for w in WORD_LISTS[length]])
+        
+        # If still not enough words, add gibberish
+        if len(available_words) &lt; word_count:
+            while len(available_words) &lt; word_count:
+                gibberish_length = random.randint(min_len, max_len)
+                available_words.append(&#x27;&#x27;.join(random.choice(&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;) 
+                                              for _ in range(gibberish_length)))
+        
+        return random.sample(available_words, min(word_count, len(available_words)))
+
+    def _generate_grid(self) -&gt; List[GridLine]:
+        lines = []
+        num_columns = 2  # Two columns of content
+        num_rows = 17  # Fixed 17 rows per column
+        total_cells = num_rows * num_columns
+        
+        # Calculate number of bracket pairs needed
+        num_duds = len(self.words) - 1  # All words except password are duds
+        bracket_counts = {
+            1: num_duds + 1,  # One bracket pair for each dud + one reset
+            2: num_duds - 1 + 1,  # One bracket pair less than duds + one reset
+            3: num_duds - 1 + 1,  # One bracket pair less than duds + one reset
+            4: num_duds - 2 + 1,  # Two bracket pairs less than duds + one reset
+            5: num_duds - 3 + 1   # Three bracket pairs less than duds + one reset
+        }
+        num_bracket_pairs = max(1, bracket_counts.get(self.difficulty, 2))
+        
+        # Generate hex addresses for all cells
+        addresses = []
+        for i in range(total_cells):
+            addr = &#x27;0x&#x27; + &#x27;&#x27;.join(random.choice(HEX_CHARS) for _ in range(4))
+            addresses.append(addr)
+        
+        # Create all grid lines with random characters first
+        for i in range(total_cells):
+            content = self._create_line_content(None)
+            line = GridLine(
+                addresses[i],
+                content[&#x27;content&#x27;],
+                content[&#x27;word&#x27;],
+                content[&#x27;word_start&#x27;],
+                content[&#x27;bracket_info&#x27;]
+            )
+            lines.append(line)
+        
+        # Randomly select positions for words (spread across all rows)
+        word_positions = random.sample(range(total_cells), len(self.words))
+        
+        # Decide which word positions will have bracket sequences
+        bracket_line_indices = set()
+        if num_bracket_pairs &gt; 0:
+            bracket_line_indices = set(random.sample(word_positions, min(num_bracket_pairs, len(word_positions))))
+        
+        # Place words at selected positions
+        for word_idx, line_idx in enumerate(word_positions):
+            has_bracket = line_idx in bracket_line_indices
+            
+            if has_bracket:
+                # Create line with both word AND bracket sequence
+                content = self._create_line_content_with_both(self.words[word_idx])
+            else:
+                # Create line with just word
+                content = self._create_line_content(self.words[word_idx])
+            
+            lines[line_idx] = GridLine(
+                addresses[line_idx],
+                content[&#x27;content&#x27;],
+                content[&#x27;word&#x27;],
+                content[&#x27;word_start&#x27;],
+                content[&#x27;bracket_info&#x27;],
+                is_dud=(self.words[word_idx] != self.password)
+            )
+        
+        # Ensure password is in the grid
+        password_in_grid = any(line.word == self.password for line in lines)
+        if not password_in_grid:
+            # Replace a random dud word with password
+            non_password_lines = [i for i, line in enumerate(lines) if line.word and line.word != self.password]
+            if non_password_lines:
+                replace_idx = random.choice(non_password_lines)
+                old_line = lines[replace_idx]
+                new_content = self._create_line_content(self.password)
+                lines[replace_idx] = GridLine(
+                    old_line.address,
+                    new_content[&#x27;content&#x27;],
+                    self.password,
+                    new_content[&#x27;word_start&#x27;],
+                    new_content[&#x27;bracket_info&#x27;],
+                    is_dud=False
+                )
+        
+        return lines
+
+    def _create_line_content(self, word: Optional[str] = None, force_bracket: bool = False) -&gt; dict:
+        content_length = 16
+        bracket_pairs = [&#x27;()&#x27;, &#x27;[]&#x27;, &#x27;{}&#x27;, &#x27;&lt;&gt;&#x27;]
+        safe_chars = &#x27;:;\&#x27;&quot;,.!=$*^\\|][)(}{&gt;&lt;&#x27;  # Safe characters that won&#x27;t interfere with highlighting
+        non_bracket_chars = &#x27;!@#$%^&amp;*_-+|;:,.?/~`&#x27;  # Characters that aren&#x27;t brackets
+        
+        if word:
+            # Always embed the word when provided
+            word_start = random.randint(0, max(0, content_length - len(word)))
+            content = []
+            
+            for i in range(content_length):
+                if word_start &lt;= i &lt; word_start + len(word):
+                    content.append(word[i - word_start])
+                else:
+                    # Ensure character before word is a safe character
+                    if i == word_start - 1:
+                        content.append(random.choice(safe_chars))
+                    else:
+                        content.append(random.choice(non_bracket_chars))
+            
+            return {
+                &#x27;content&#x27;: &#x27;&#x27;.join(content),
+                &#x27;word&#x27;: word,
+                &#x27;word_start&#x27;: word_start,
+                &#x27;bracket_info&#x27;: None
+            }
+        
+        # No word provided - just random characters (no brackets)
+        content = &#x27;&#x27;.join(random.choice(non_bracket_chars) for _ in range(content_length))
+        return {
+            &#x27;content&#x27;: content,
+            &#x27;word&#x27;: None,
+            &#x27;word_start&#x27;: -1,
+            &#x27;bracket_info&#x27;: None
+        }
+
+    def _create_line_content_with_both(self, word: str) -&gt; dict:
+        &quot;&quot;&quot;Create a line with both a word and a bracket sequence&quot;&quot;&quot;
+        content_length = 16
+        bracket_pairs = [&#x27;()&#x27;, &#x27;[]&#x27;, &#x27;{}&#x27;, &#x27;&lt;&gt;&#x27;]
+        
+        # Randomly position the word
+        word_start = random.randint(0, max(0, content_length - len(word)))
+        
+        # Randomly position the bracket sequence (not overlapping with word)
+        bracket_pair = random.choice(bracket_pairs)
+        open_bracket = bracket_pair[0]
+        close_bracket = bracket_pair[1]
+        
+        # Find a valid position for brackets that doesn&#x27;t overlap with word
+        max_attempts = 10
+        for _ in range(max_attempts):
+            bracket_start = random.randint(0, content_length - 6)
+            bracket_end = bracket_start + random.randint(1, 4)  # Ensure bracket_end &gt; bracket_start
+            
+            # Check if brackets overlap with word
+            word_end = word_start + len(word)
+            brackets_overlap = (bracket_start &lt; word_end and bracket_end &gt;= word_start)
+            
+            if not brackets_overlap:
+                break
+        else:
+            # If we couldn&#x27;t find a non-overlapping position, just place brackets
+            bracket_start = random.randint(0, content_length - 6)
+            bracket_end = bracket_start + random.randint(1, 4)  # Ensure bracket_end &gt; bracket_start
+        
+        # Generate content with both word and brackets
+        content = []
+        safe_chars = &#x27;:;\&#x27;&quot;,.!=$*^\\|][)(}{&gt;&lt;&#x27;  # Safe characters that won&#x27;t interfere with highlighting
+        non_bracket_chars = &#x27;!@#$%^&amp;*_-+|;:,.?/~`&#x27;  # Characters that aren&#x27;t brackets
+        
+        for i in range(content_length):
+            # Prioritize word characters first
+            if word_start &lt;= i &lt; word_start + len(word):
+                content.append(word[i - word_start])
+            elif i == bracket_start:
+                content.append(open_bracket)
+            elif i == bracket_end:
+                content.append(close_bracket)
+            else:
+                # Ensure character before word is a safe character
+                if i == word_start - 1:
+                    content.append(random.choice(safe_chars))
+                else:
+                    content.append(random.choice(non_bracket_chars))
+        
+        return {
+            &#x27;content&#x27;: &#x27;&#x27;.join(content),
+            &#x27;word&#x27;: word,
+            &#x27;word_start&#x27;: word_start,
+            &#x27;bracket_info&#x27;: (bracket_start, bracket_end, bracket_pair)
+        }
+
+    def get_current_highlight(self) -&gt; Tuple[int, int]:
+        &quot;&quot;&quot;Get the start and end positions of the current highlight&quot;&quot;&quot;
+        line = self.grid_lines[self.cursor_row]
+
+        # Don&#x27;t highlight if word or bracket has been removed/used
+        if line.removed:
+            return (self.cursor_col, self.cursor_col + 1)
+
+        # Check if cursor is on a word
+        if line.word and line.word_start &lt;= self.cursor_col &lt; line.word_start + len(line.word):
+            return (line.word_start, line.word_start + len(line.word))
+
+        # Check if cursor is on a bracket
+        if line.bracket_info and not line.bracket_used:
+            bracket_start, bracket_end, _ = line.bracket_info
+            if self.cursor_col == bracket_start:
+                return (bracket_start, bracket_end + 1)
+
+        return (self.cursor_col, self.cursor_col + 1)
+
+    def get_current_word(self) -&gt; Optional[str]:
+        &quot;&quot;&quot;Get the word at current cursor position&quot;&quot;&quot;
+        line = self.grid_lines[self.cursor_row]
+        
+        if line.word and not line.removed and line.word_start &lt;= self.cursor_col &lt; line.word_start + len(line.word):
+            return line.word
+        
+        return None
+
+    def get_current_bracket(self) -&gt; Optional[Tuple[int, int, str]]:
+        &quot;&quot;&quot;Get bracket info at current cursor position&quot;&quot;&quot;
+        line = self.grid_lines[self.cursor_row]
+        
+        if line.bracket_info and not line.bracket_used:
+            bracket_start, bracket_end, bracket_pair = line.bracket_info
+            if self.cursor_col == bracket_start:
+                return line.bracket_info
+        
+        return None
+
+    def count_matches(self, word: str) -&gt; int:
+        return sum(1 for a, b in zip(word, self.password) if a == b)
+
+    def make_guess(self, word: str) -&gt; bool:
+        if self.game_over or self.locked_out:
+            return False
+        
+        # Check if word is a removed dud
+        for line in self.grid_lines:
+            if line.word == word and line.removed:
+                return False
+        
+        if word not in self.words:
+            return False
+        
+        matches = self.count_matches(word)
+        self.last_match_count = matches
+        self.attempts_left -= 1
+        
+        if matches == len(self.password):
+            self.output_history.append(&quot;ACCESS GRANTED&quot;)
+            self.won = True
+            self.game_over = True
+        else:
+            self.output_history.append(word)
+            self.output_history.append(&quot;Entry denied&quot;)
+            self.output_history.append(f&quot;{matches}/{len(self.password)} correct&quot;)
+            
+            if self.attempts_left &lt;= 0 and not self.config[&#x27;retry&#x27;]:
+                self.locked_out = True
+                self.game_over = True
+        
+        # Keep only last 17 outputs
+        self.output_history = self.output_history[-17:]
+        
+        return matches == len(self.password)
+
+    def activate_bracket(self) -&gt; Tuple[bool, str]:
+        if self.game_over or self.locked_out:
+            return False, &quot;&quot;
+        
+        bracket_info = self.get_current_bracket()
+        if not bracket_info:
+            return False, &quot;&quot;
+        
+        # Mark bracket as used and replace with periods
+        line = self.grid_lines[self.cursor_row]
+        bracket_start, bracket_end, bracket_pair = bracket_info
+        line.bracket_used = True
+        
+        # Replace bracket characters with periods
+        content_list = list(line.content)
+        content_list[bracket_start] = &#x27;.&#x27;
+        content_list[bracket_end] = &#x27;.&#x27;
+        line.content = &#x27;&#x27;.join(content_list)
+        
+        # Decide action: remove dud or replenish
+        # Only ONE bracket should replenish per puzzle
+        if not self.replenish_bracket_used:
+            # 50% chance for first bracket, decreasing for others
+            non_password_words = [i for i, line in enumerate(self.grid_lines) if line.word and line.word != self.password and not line.removed]
+            
+            if non_password_words and random.random() &lt; 0.5:
+                # Remove dud - replace word with dots
+                dud_idx = random.choice(non_password_words)
+                dud_line = self.grid_lines[dud_idx]
+                word_len = len(dud_line.word)
+                
+                # Replace word with dots
+                content_list = list(dud_line.content)
+                for i in range(dud_line.word_start, dud_line.word_start + word_len):
+                    content_list[i] = &#x27;.&#x27;
+                dud_line.content = &#x27;&#x27;.join(content_list)
+                dud_line.removed = True
+                
+                self.output_history.append(&quot;Dud removed.&quot;)
+                # Keep only last 17 outputs
+                self.output_history = self.output_history[-17:]
+                return True, &quot;Dud removed&quot;
+            else:
+                # Replenish
+                self.replenish_bracket_used = True
+                self.attempts_left = self.max_attempts
+                self.output_history.append(&quot;Attempts reset.&quot;)
+                # Keep only last 17 outputs
+                self.output_history = self.output_history[-17:]
+                return True, &quot;Attempts reset&quot;
+        else:
+            # Only remove duds after replenish used
+            non_password_words = [i for i, line in enumerate(self.grid_lines) if line.word and line.word != self.password and not line.removed]
+            if non_password_words:
+                dud_idx = random.choice(non_password_words)
+                dud_line = self.grid_lines[dud_idx]
+                word_len = len(dud_line.word)
+                
+                # Replace word with dots
+                content_list = list(dud_line.content)
+                for i in range(dud_line.word_start, dud_line.word_start + word_len):
+                    content_list[i] = &#x27;.&#x27;
+                dud_line.content = &#x27;&#x27;.join(content_list)
+                dud_line.removed = True
+                
+                self.output_history.append(&quot;Dud removed.&quot;)
+                # Keep only last 17 outputs
+                self.output_history = self.output_history[-17:]
+                return True, &quot;Dud removed&quot;
+        
+        return False, &quot;No action available&quot;
+
+
+def draw_header(stdscr, game: HackingGame):
+    config = DIFFICULTY_CONFIG[game.difficulty]
+    
+    stdscr.addstr(0, 0, &quot;Robco industries (tm) termlink protocol&quot;)
+    stdscr.addstr(1, 0, &quot;Enter password now&quot;)
+    stdscr.addstr(2, 0, &quot;&quot;)
+    
+    # Draw attempts with block characters
+    attempts_str = f&quot;{game.attempts_left} attempt(s) left: &quot;
+    blocks = &quot;█ &quot; * game.attempts_left
+    stdscr.addstr(3, 0, attempts_str + blocks)
+    
+    stdscr.addstr(4, 0, &quot;&quot;)
+
+
+def draw_grid(stdscr, game: HackingGame, start_row: int):
+    num_columns = 2  # Two columns of content
+    num_rows = 17
+    
+    # Draw the 2 columns of content
+    for row_idx in range(num_rows):
+        row = start_row + row_idx
+        
+        # Draw up to 2 columns per row
+        for col_idx in range(num_columns):
+            line_idx = row_idx * num_columns + col_idx
+            if line_idx &gt;= len(game.grid_lines):
+                break
+            
+            line = game.grid_lines[line_idx]
+            
+            # Calculate column position
+            col_pos = col_idx * (len(line.address) + len(line.content) + 5)
+            
+            # Determine highlight range
+            if line_idx == game.cursor_row:
+                highlight_start, highlight_end = game.get_current_highlight()
+            else:
+                highlight_start, highlight_end = -1, -1
+            
+            # Draw address
+            try:
+                stdscr.addstr(row, col_pos, line.address)
+            except curses.error:
+                pass
+            
+            # Draw content with highlighting
+            content_col = col_pos + len(line.address) + 1
+            for j, char in enumerate(line.content):
+                try:
+                    if line_idx == game.cursor_row and highlight_start &lt;= j &lt; highlight_end:
+                        stdscr.addstr(row, content_col + j, char, curses.A_REVERSE)
+                    else:
+                        stdscr.addstr(row, content_col + j, char)
+                except curses.error:
+                    pass
+    
+    # Draw the output column (third column)
+    output_col_start = 2 * (len(game.grid_lines[0].address) + len(game.grid_lines[0].content) + 5)
+    
+    # Show last 17 outputs, with newest at the bottom
+    recent_outputs = game.output_history[-17:] if len(game.output_history) &gt; 17 else game.output_history
+    
+    for i, output in enumerate(recent_outputs):
+        row = start_row + i
+        try:
+            stdscr.addstr(row, output_col_start, &quot;&gt; &quot; + output)
+        except curses.error:
+            pass
+
+
+def draw_final_output(stdscr, game: HackingGame, row: int):
+    if game.won:
+        stdscr.addstr(row, 0, &quot;ACCESS GRANTED&quot;, curses.A_BOLD)
+    elif game.locked_out:
+        # Center the terminal locked message
+        stdscr.addstr(row, 0, &quot;&quot;)
+        stdscr.addstr(row + 1, 0, &quot;      TERMINAL LOCKED&quot;, curses.A_BOLD)
+        stdscr.addstr(row + 2, 0, &quot;PLEASE CONTACT ADMINISTRATOR&quot;, curses.A_BOLD)
+
+
+def main(stdscr):
+    curses.curs_set(0)
+    stdscr.nodelay(0)
+    stdscr.clear()
+    
+    game = HackingGame(args.difficulty)
+    
+    while not game.game_over:
+        stdscr.clear()
+        stdscr.refresh()
+        
+        draw_header(stdscr, game)
+        draw_grid(stdscr, game, 5)
+        
+        stdscr.refresh()
+        
+        key = stdscr.getch()
+        
+        if key == ord(&#x27;q&#x27;) or key == ord(&#x27;Q&#x27;):
+            break
+        
+        # Navigation
+        num_columns = 2
+        num_rows = 17
+        
+        if key == curses.KEY_UP:
+            # Move up within current column
+            current_row = game.cursor_row // num_columns
+            current_col = game.cursor_row % num_columns
+            if current_row &gt; 0:
+                game.cursor_row = (current_row - 1) * num_columns + current_col
+        elif key == curses.KEY_DOWN:
+            # Move down within current column
+            current_row = game.cursor_row // num_columns
+            current_col = game.cursor_row % num_columns
+            if current_row &lt; num_rows - 1:
+                game.cursor_row = (current_row + 1) * num_columns + current_col
+        elif key == curses.KEY_LEFT:
+            # Move left within current row
+            current_line = game.grid_lines[game.cursor_row]
+            if game.cursor_col &gt; 0:
+                game.cursor_col -= 1
+            else:
+                # At first character of row
+                current_col = game.cursor_row % num_columns
+                current_row = game.cursor_row // num_columns
+                
+                if current_col == 1:
+                    # In column 2, move to last character of column 1 (same row)
+                    prev_line_idx = current_row * num_columns
+                    if prev_line_idx &lt; len(game.grid_lines):
+                        game.cursor_row = prev_line_idx
+                        game.cursor_col = len(game.grid_lines[prev_line_idx].content) - 1
+                elif current_col == 0 and current_row &gt; 0:
+                    # In column 1, move to last character of column 2 (previous row)
+                    prev_row = current_row - 1
+                    prev_line_idx = prev_row * num_columns + 1
+                    if prev_line_idx &lt; len(game.grid_lines):
+                        game.cursor_row = prev_line_idx
+                        game.cursor_col = len(game.grid_lines[prev_line_idx].content) - 1
+        elif key == curses.KEY_RIGHT:
+            # Move right within current row
+            current_line = game.grid_lines[game.cursor_row]
+            if game.cursor_col &lt; len(current_line.content) - 1:
+                game.cursor_col += 1
+            else:
+                # At last character of row
+                current_col = game.cursor_row % num_columns
+                current_row = game.cursor_row // num_columns
+                
+                if current_col == 0 and current_row &lt; num_rows - 1:
+                    # Move to first character of column 2, same row
+                    next_line_idx = current_row * num_columns + 1
+                    if next_line_idx &lt; len(game.grid_lines):
+                        game.cursor_row = next_line_idx
+                        game.cursor_col = 0
+                elif current_col == 1:
+                    # In column 2, move to first character of column 1, next row
+                    next_row = (current_row + 1) % num_rows  # Wrap around to first row if at bottom
+                    next_line_idx = next_row * num_columns
+                    if next_line_idx &lt; len(game.grid_lines):
+                        game.cursor_row = next_line_idx
+                        game.cursor_col = 0
+        
+        # Selection
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            # Check if on a word
+            current_word = game.get_current_word()
+            if current_word:
+                game.make_guess(current_word)
+            else:
+                # Check if on a bracket
+                game.activate_bracket()
+    
+    # Show final state
+    stdscr.clear()
+    
+    if game.locked_out:
+        # Blank screen and show terminal locked message
+        stdscr.addstr(0, 0, &quot;&quot;)
+        stdscr.addstr(1, 0, &quot;      TERMINAL LOCKED&quot;, curses.A_BOLD)
+        stdscr.addstr(2, 0, &quot;PLEASE CONTACT ADMINISTRATOR&quot;, curses.A_BOLD)
+    else:
+        draw_header(stdscr, game)
+        draw_grid(stdscr, game, 5)
+        
+        num_rows = 17
+        draw_final_output(stdscr, game, 5 + num_rows + 2)
+    
+    stdscr.addstr(5 + 17 + 4, 0, &quot;Press any key to exit...&quot;)
+    stdscr.refresh()
+    stdscr.getch()
+
+
+if __name__ == &#x27;__main__&#x27;:
+    # Parse arguments before initializing curses
+    parser = argparse.ArgumentParser(
+        description=&#x27;Fallout 4 Hacking Mini-Game&#x27;,
+        add_help=False
+    )
+    parser.add_argument(&#x27;-d&#x27;, &#x27;--difficulty&#x27;, type=int, choices=[1, 2, 3, 4, 5],
+                        help=&#x27;Difficulty level (1-5)&#x27;)
+    parser.add_argument(&#x27;-h&#x27;, &#x27;--help&#x27;, action=&#x27;store_true&#x27;,
+                        help=&#x27;Display this help file&#x27;)
+    args = parser.parse_args()
+    
+    # Display help if requested or no difficulty specified
+    if args.help or args.difficulty is None:
+        print(&quot;Syntax: fallout_hacking.py [OPTION]&quot;)
+        print()
+        print(&quot;Options are:&quot;)
+        print(&quot;  --difficulty=[1-5]  loads the mini game with the specified difficulty level (-d[1-5])&quot;)
+        print(&quot;  --help             displays this help file&quot;)
+        print()
+        print(&quot;Difficulty levels:&quot;)
+        print(&quot;  1 - Very Easy: 4-5 char passwords&quot;)
+        print()
+        print(&quot;  2 - Easy: 6-8 char passwords&quot;)
+        print()
+        print(&quot;  3 - Average: 9-10 char passwords&quot;)
+        print()
+        print(&quot;  4 - Hard: 11-12 char passwords&quot;)
+        print()
+        print(&quot;  5 - Very Hard: 13-15 char passwords&quot;)
+        sys.exit(0)
+    
+    try:
+        curses.wrapper(main)
+    except KeyboardInterrupt:
+        sys.exit(0)
+</pre>
+      </div>
+    </div>
+    <div class="house-line" style="margin-top:8px;">// run with: python3 fallout_hacking_advanced.py --difficulty=3 (requires a real terminal — curses does not run in a browser)</div>
+  </div>
+
   <div class="footer">// jordan flaum &nbsp;·&nbsp; <a href="readme.html?doc=README-fallout-terminal-hacking.md" style="color:var(--green);text-decoration:none;">// README</a> &nbsp;·&nbsp; <a href="index.html" style="color:var(--green);text-decoration:none;">← back to portfolio</a></div>
 
 </div>
@@ -397,6 +1398,310 @@ function copyCode(){
     setTimeout(function(){ btn.textContent = '// copy code'; }, 1800);
   });
 }
+
+function copyCode2(){
+  const codeEl = document.getElementById('codeBlock2');
+  const btn = document.getElementById('copyBtn2');
+  const text = codeEl.innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent = '// copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){
+      btn.textContent = '// copy code';
+      btn.classList.remove('copied');
+    }, 1800);
+  }).catch(function(){
+    btn.textContent = '// copy failed';
+    setTimeout(function(){ btn.textContent = '// copy code'; }, 1800);
+  });
+}
+
+(function(){
+  const WORD_POOL = [
+    "REACTOR", "NUCLEAR", "STATION", "WARFARE", "FALLOUT",
+    "SHELTER", "MUTANTS", "ROBOTIC", "BUNKERX", "CAPITAL",
+    "REMANTS", "CRIMSON", "FACTION", "SURVIVE", "URANIUM"
+  ];
+  const ATTEMPTS_ALLOWED = 4;
+  const ROWLEN = 12;
+  const ROWS = 12;
+  const NUM_PAIRS = 6;
+  const PAIR_TYPES = [['<','>'], ['(',')'], ['[',']'], ['{','}']];
+  const JUNK_POOL = (function(){
+    const symbols = "!@#$%^&*-_=+;:,.?/\\|~`'\"".split('');
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const digits = "0123456789".split('');
+    return symbols.concat(symbols, letters, digits);
+  })();
+
+  const dumpEl = document.getElementById('rcDump');
+  const feedEl = document.getElementById('rcFeed');
+  const pipsEl = document.getElementById('rcPips');
+  const attemptsLabelEl = document.getElementById('rcAttemptsLabel');
+  const newGameBtn = document.getElementById('rcNewGame');
+  const statPlayed = document.getElementById('rcStatPlayed');
+  const statWon = document.getElementById('rcStatWon');
+  const statLost = document.getElementById('rcStatLost');
+
+  if (!dumpEl || !feedEl || !pipsEl || !newGameBtn) return;
+
+  let words = [];
+  let secretIdx = 0;
+  let wordStates = [];
+  let pairUsed = {};
+  let attemptsLeft = ATTEMPTS_ALLOWED;
+  let roundOver = true;
+  let colArrays = [[], []];
+  let baseAddr = 0xF400;
+  let stats = { played: 0, won: 0, lost: 0 };
+
+  function sampleWords(arr, n){
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+    }
+    return copy.slice(0, n);
+  }
+
+  function likeness(a, b){
+    let n = 0;
+    for (let i = 0; i < a.length; i++){ if (a[i] === b[i]) n++; }
+    return n;
+  }
+
+  function escapeHtml(ch){
+    if (ch === '<') return '&lt;';
+    if (ch === '>') return '&gt;';
+    if (ch === '&') return '&amp;';
+    if (ch === '"') return '&quot;';
+    if (ch === "'") return '&#39;';
+    return ch;
+  }
+
+  function buildDump(wordList){
+    const total = ROWS * ROWLEN;
+    const cols = [new Array(total).fill(null), new Array(total).fill(null)];
+
+    wordList.forEach(function(word, wi){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = tries < 150 ? (wi % 2) : Math.floor(Math.random() * 2);
+        const row = Math.floor(Math.random() * ROWS);
+        const maxStart = ROWLEN - word.length;
+        if (maxStart < 0) break;
+        const startInRow = Math.floor(Math.random() * (maxStart + 1));
+        const start = row * ROWLEN + startInRow;
+        let ok = true;
+        for (let i = 0; i < word.length; i++){
+          if (cols[c][start + i] !== null){ ok = false; break; }
+        }
+        if (ok){
+          for (let i = 0; i < word.length; i++){
+            cols[c][start + i] = { ch: word[i], type: 'word', groupId: 'w' + wi, wordIndex: wi };
+          }
+          placed = true;
+        }
+      }
+    });
+
+    for (let p = 0; p < NUM_PAIRS; p++){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = p % 2 === 0 ? 0 : 1;
+        const type = PAIR_TYPES[Math.floor(Math.random() * PAIR_TYPES.length)];
+        const gap = 2 + Math.floor(Math.random() * 8);
+        const openIdx = Math.floor(Math.random() * (total - gap - 2));
+        const closeIdx = openIdx + gap + 1;
+        if (closeIdx >= total) continue;
+        if (cols[c][openIdx] !== null || cols[c][closeIdx] !== null) continue;
+        cols[c][openIdx] = { ch: type[0], type: 'bracket', groupId: 'p' + p, pairRole: 'open' };
+        cols[c][closeIdx] = { ch: type[1], type: 'bracket', groupId: 'p' + p, pairRole: 'close' };
+        placed = true;
+      }
+    }
+
+    for (let c = 0; c < 2; c++){
+      for (let i = 0; i < total; i++){
+        if (cols[c][i] === null){
+          cols[c][i] = { ch: JUNK_POOL[Math.floor(Math.random() * JUNK_POOL.length)], type: 'junk' };
+        }
+      }
+    }
+    return cols;
+  }
+
+  function renderCell(cell){
+    let cls = 'tc';
+    let attrs = '';
+    if (cell.type === 'word'){
+      cls += ' word';
+      const state = wordStates[cell.wordIndex];
+      if (state === 'correct') cls += ' correct';
+      if (state === 'tried_wrong') cls += ' disabled';
+      if (state === 'removed_dud') cls += ' disabled dud';
+      attrs = ' data-group="' + cell.groupId + '" data-role="word" data-widx="' + cell.wordIndex + '"';
+    } else if (cell.type === 'bracket'){
+      cls += ' bracket';
+      if (pairUsed[cell.groupId]) cls += ' used';
+      attrs = ' data-group="' + cell.groupId + '" data-role="bracket"';
+    } else {
+      cls += ' junk';
+      attrs = ' data-role="junk"';
+    }
+    return '<span class="' + cls + '"' + attrs + '>' + escapeHtml(cell.ch) + '</span>';
+  }
+
+  function renderDump(){
+    let html = '';
+    for (let c = 0; c < 2; c++){
+      html += '<div class="pipboy-col">';
+      for (let r = 0; r < ROWS; r++){
+        const addr = c === 0 ? (baseAddr + r * 0xC) : (baseAddr + ROWS * 0xC + r * 0xC);
+        const addrHex = '0x' + (addr & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        html += '<div class="term-row"><span class="term-addr">' + addrHex + '</span><span class="term-chars">';
+        for (let i = 0; i < ROWLEN; i++){
+          html += renderCell(colArrays[c][r * ROWLEN + i]);
+        }
+        html += '</span></div>';
+      }
+      html += '</div>';
+    }
+    dumpEl.innerHTML = html;
+  }
+
+  function renderPips(){
+    let html = '';
+    for (let i = 0; i < ATTEMPTS_ALLOWED; i++){
+      html += '<span class="pip' + (i < attemptsLeft ? '' : ' empty') + '"></span>';
+    }
+    pipsEl.innerHTML = html;
+    attemptsLabelEl.textContent = attemptsLeft + ' ATTEMPT(S) LEFT:';
+  }
+
+  function renderStats(){
+    statPlayed.textContent = stats.played;
+    statWon.textContent = stats.won;
+    statLost.textContent = stats.lost;
+  }
+
+  function addFeed(text, kind){
+    const line = document.createElement('div');
+    line.className = 'f-' + (kind || 'info');
+    line.textContent = text;
+    feedEl.appendChild(line);
+    feedEl.scrollTop = feedEl.scrollHeight;
+  }
+
+  function handleWordClick(idx){
+    if (roundOver || wordStates[idx] !== 'active') return;
+    const word = words[idx];
+    addFeed('>' + word, 'info');
+
+    if (idx === secretIdx){
+      wordStates[idx] = 'correct';
+      roundOver = true;
+      stats.played++; stats.won++;
+      addFeed('>Entry granted.', 'good');
+      renderStats();
+    } else {
+      wordStates[idx] = 'tried_wrong';
+      attemptsLeft--;
+      const l = likeness(word, words[secretIdx]);
+      addFeed('>Entry denied.', 'bad');
+      addFeed('>' + l + '/' + word.length + ' correct.', 'bad');
+      renderPips();
+      if (attemptsLeft <= 0){
+        roundOver = true;
+        stats.played++; stats.lost++;
+        addFeed('>Terminal locked.', 'bad');
+        addFeed('>Password was: ' + words[secretIdx], 'bad');
+        renderStats();
+      }
+    }
+    renderDump();
+  }
+
+  function handleBracketClick(gid){
+    if (roundOver || pairUsed[gid]) return;
+    pairUsed[gid] = true;
+
+    const activeWrong = [];
+    wordStates.forEach(function(s, i){ if (s === 'active' && i !== secretIdx) activeWrong.push(i); });
+
+    let effect = null;
+    if (attemptsLeft < ATTEMPTS_ALLOWED && (activeWrong.length === 0 || Math.random() < 0.5)){
+      effect = 'reset';
+    } else if (activeWrong.length > 0){
+      effect = 'dud';
+    } else if (attemptsLeft < ATTEMPTS_ALLOWED){
+      effect = 'reset';
+    }
+
+    if (effect === 'dud'){
+      const pick = activeWrong[Math.floor(Math.random() * activeWrong.length)];
+      wordStates[pick] = 'removed_dud';
+      addFeed('>Dud removed: ' + words[pick], 'good');
+    } else if (effect === 'reset'){
+      attemptsLeft = ATTEMPTS_ALLOWED;
+      renderPips();
+      addFeed('>Attempts reset!', 'good');
+    } else {
+      addFeed('>...', 'info');
+    }
+    renderDump();
+  }
+
+  dumpEl.addEventListener('click', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (!el) return;
+    const role = el.getAttribute('data-role');
+    if (role === 'word'){
+      handleWordClick(parseInt(el.getAttribute('data-widx'), 10));
+    } else if (role === 'bracket'){
+      handleBracketClick(el.getAttribute('data-group'));
+    }
+  });
+
+  function setHighlight(el, on){
+    const gid = el.getAttribute('data-group');
+    if (gid){
+      const nodes = dumpEl.querySelectorAll('[data-group="' + gid.replace(/"/g, '\\"') + '"]');
+      Array.prototype.forEach.call(nodes, function(n){ n.classList.toggle('hl', on); });
+    } else {
+      el.classList.toggle('hl', on);
+    }
+  }
+
+  dumpEl.addEventListener('mouseover', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, true);
+  });
+  dumpEl.addEventListener('mouseout', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, false);
+  });
+
+  function newGame(){
+    words = sampleWords(WORD_POOL, 8);
+    secretIdx = Math.floor(Math.random() * words.length);
+    wordStates = words.map(function(){ return 'active'; });
+    pairUsed = {};
+    attemptsLeft = ATTEMPTS_ALLOWED;
+    roundOver = false;
+    baseAddr = 0xF400 + Math.floor(Math.random() * 20) * 0xC;
+    colArrays = buildDump(words);
+    feedEl.innerHTML = '';
+    renderPips();
+    renderDump();
+  }
+
+  newGameBtn.addEventListener('click', newGame);
+  renderStats();
+  newGame();
+})();
 </script>
 
 </body>

@@ -393,6 +393,60 @@
     .game-stats span b { color: var(--gold); }
     .house-line { font-family: var(--mono); font-size: 10px; color: rgba(225,245,238,0.4); text-align: center; margin-top: 10px; letter-spacing: 1px; }
 
+    /* ── PIP-BOY MONITOR ── */
+    .pipboy-monitor {
+      background: #0d0d0c; border: 6px solid #2a2a28; border-radius: 26px;
+      padding: 20px; box-shadow: 0 14px 34px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .pipboy-screen {
+      background: #02120C; border-radius: 14px; padding: 18px 18px 14px;
+      position: relative; overflow: hidden; box-shadow: inset 0 0 70px rgba(0,0,0,0.85);
+    }
+    .pipboy-screen.crt { animation: flicker 6s infinite; }
+    .pipboy-screen.crt::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(225,245,238,0.05) 0px, rgba(225,245,238,0.05) 1px, transparent 1px, transparent 3px);
+      mix-blend-mode: overlay; animation: scanmove 6s linear infinite;
+    }
+    .pipboy-screen::before {
+      content: ''; position: absolute; top: -40%; right: -25%; width: 70%; height: 120%;
+      background: radial-gradient(circle, rgba(120,255,190,0.13), transparent 60%); pointer-events: none;
+    }
+    .pb-header { font-family: var(--mono); font-size: 12px; color: #6FE3B0; text-transform: uppercase; letter-spacing: 1px; line-height: 1.7; }
+    .pb-attempts { font-family: var(--mono); font-size: 12px; color: #9FE1CB; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; margin: 10px 0 14px; }
+    .pips { display: inline-flex; gap: 5px; }
+    .pip { width: 9px; height: 9px; background: #6FE3B0; box-shadow: 0 0 5px rgba(111,227,176,0.8); }
+    .pip.empty { background: rgba(111,227,176,0.15); box-shadow: none; }
+
+    .pipboy-body { display: flex; flex-wrap: wrap; gap: 18px; }
+    .pipboy-col { flex: 1 1 220px; min-width: 190px; }
+    .term-row { display: flex; gap: 8px; white-space: nowrap; }
+    .term-addr { font-family: var(--mono); font-size: 10.5px; color: rgba(111,227,176,0.45); line-height: 1.85; }
+    .term-chars { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.5px; line-height: 1.85; }
+    .tc { padding: 0 1px; border-radius: 2px; cursor: default; color: rgba(159,225,203,0.85); }
+    .tc.junk { cursor: pointer; }
+    .tc.junk:hover, .tc.junk.hl { background: rgba(93,202,165,0.18); color: #d9ffe9; }
+    .tc.word { cursor: pointer; color: #eafff2; font-weight: 700; }
+    .tc.word:hover:not(.disabled), .tc.word.hl:not(.disabled) { background: rgba(93,202,165,0.4); }
+    .tc.word.disabled { opacity: 0.32; cursor: default; }
+    .tc.word.disabled.dud { text-decoration: line-through; }
+    .tc.word.correct { color: #8fffc0; background: rgba(143,255,192,0.2); text-shadow: 0 0 6px rgba(143,255,192,0.8); }
+    .tc.bracket { cursor: pointer; color: #ffe27a; font-weight: 700; }
+    .tc.bracket:hover, .tc.bracket.hl { background: rgba(255,226,122,0.35); }
+    .tc.bracket.used { opacity: 0.25; cursor: default; }
+
+    .pipboy-feed {
+      flex: 1 1 220px; min-width: 190px; max-height: 340px; overflow-y: auto;
+      border-left: 1px dashed rgba(111,227,176,0.25); padding-left: 14px;
+      font-family: var(--mono); font-size: 12px; line-height: 1.85;
+    }
+    .pipboy-feed div.f-info { color: #9FE1CB; }
+    .pipboy-feed div.f-good { color: #8fffc0; }
+    .pipboy-feed div.f-bad { color: #ff9a8a; }
+    .pipboy-feed::-webkit-scrollbar { width: 6px; }
+    .pipboy-feed::-webkit-scrollbar-thumb { background: rgba(111,227,176,0.3); border-radius: 3px; }
+
     /* ── PROJECT CARDS ── */
     .projects-grid {
       display: grid;
@@ -539,7 +593,7 @@
     </div>
     <div class="about-card">
       <p class="about-text">
-        My name is Jordan Flaum, and I am a Cybersecurity and Digital Forensics graduate with 2+ years of hands on IT management experience supporting a law firm. In my current role, I manage a small IT team consisting of one technician while overseeing day to day IT operations and providing technical support for 25 on site users. I have experience securing sensitive legal environments, managing enterprise infrastructure, conducting vulnerability assessments, and implementing security best practices. I am a strong advocate for continuous learning and enjoy being part of collaborative teams where knowledge is shared and everyone has the opportunity to grow. I believe every person has something valuable to teach, and I strive to learn from every colleague, challenge, and experience. I am passionate about expanding my technical expertise, taking on new challenges, and contributing to secure, resilient IT environments while continuing to grow as a cybersecurity professional.
+        Cybersecurity and digital forensics graduate with nearly 3 years of hands on IT management experience at a law firm. Proven track record securing sensitive legal environments, hardening infrastructure, leading vulnerability assessments, and building security aware teams. Skilled across the full stack of enterprise IT: from Active Directory and Azure AD to EDR tooling and incident response policy.
       </p>
     </div>
   </div>
@@ -782,23 +836,32 @@
       <div class="home-lab-feature-top">
         <div class="home-lab-feature-name">RobCo Termlink — Fallout Terminal Hacking</div>
       </div>
-      <p class="home-lab-feature-desc">A fully playable Fallout terminal hacking minigame written in pure Python — replicating the classic mechanics from Fallout 3, 4, and New Vegas. Guess the correct password from a pool of decoys, using a Likeness score (exact character matches in the correct position) to narrow it down before the terminal locks.</p>
+      <p class="home-lab-feature-desc">A fully playable Fallout terminal hacking minigame — replicating the classic mechanics from Fallout 3, 4, and New Vegas. Click a highlighted word to guess it, using a Likeness score to narrow it down. Hidden in the junk are matching bracket pairs — click either symbol of an intact pair to remove a dud or reset your attempts.</p>
 
-      <div class="felt crt">
-        <div class="table-title">RobCo Industries (TM) Termlink Protocol</div>
-
-        <div class="area">
-          <div class="area-label"><span>Enter Password Now</span><span class="score-pill">4 ATTEMPT(S)</span></div>
-          <div style="font-family: var(--mono); font-size: 13px; color: #9FE1CB; line-height: 2.1;">
-            &gt; REACTOR&nbsp;&nbsp;&nbsp;&gt; NUCLEAR&nbsp;&nbsp;&nbsp;&gt; STATION&nbsp;&nbsp;&nbsp;&gt; WARFARE<br>
-            &gt; FALLOUT&nbsp;&nbsp;&nbsp;&gt; SHELTER&nbsp;&nbsp;&nbsp;&gt; MUTANTS&nbsp;&nbsp;&nbsp;&gt; ROBOTIC
+      <div class="pipboy-monitor">
+        <div class="pipboy-screen crt">
+          <div class="pb-header">
+            <div>ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>
+            <div>ENTER PASSWORD NOW</div>
           </div>
+          <div class="pb-attempts">
+            <span id="rcAttemptsLabel">4 ATTEMPT(S) LEFT:</span>
+            <span class="pips" id="rcPips"></span>
+          </div>
+          <div class="pipboy-body" id="rcDump"></div>
+          <div class="pipboy-feed" id="rcFeed"></div>
         </div>
-
-        <div class="game-result">LIKENESS=3/7 &nbsp;·&nbsp; ACCESS DENIED.</div>
-
-        <div class="house-line">// pure Python CLI game — read the full walkthrough &amp; grab the code below</div>
       </div>
+
+      <div class="game-controls" style="margin-top:1.1rem;">
+        <button class="game-btn primary" id="rcNewGame">New Game</button>
+      </div>
+      <div class="game-stats">
+        <span>Played: <b id="rcStatPlayed">0</b></span>
+        <span>Won: <b id="rcStatWon">0</b></span>
+        <span>Lost: <b id="rcStatLost">0</b></span>
+      </div>
+      <div class="house-line">// click a word to guess it · click a bracket pair to remove a dud or reset your attempts · every character on screen is selectable</div>
 
       <a href="fallout-terminal-hacking.html" class="project-link" style="margin-top:1.1rem;">// full walkthrough &amp; code →</a>
     </div>
@@ -1066,6 +1129,293 @@
   btnStand.addEventListener('click', stand);
   btnNewGame.addEventListener('click', newGame);
 
+  renderStats();
+  newGame();
+})();
+
+(function(){
+  const WORD_POOL = [
+    "REACTOR", "NUCLEAR", "STATION", "WARFARE", "FALLOUT",
+    "SHELTER", "MUTANTS", "ROBOTIC", "BUNKERX", "CAPITAL",
+    "REMANTS", "CRIMSON", "FACTION", "SURVIVE", "URANIUM"
+  ];
+  const ATTEMPTS_ALLOWED = 4;
+  const ROWLEN = 12;
+  const ROWS = 12;
+  const NUM_PAIRS = 6;
+  const PAIR_TYPES = [['<','>'], ['(',')'], ['[',']'], ['{','}']];
+  const JUNK_POOL = (function(){
+    const symbols = "!@#$%^&*-_=+;:,.?/\\|~`'\"".split('');
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const digits = "0123456789".split('');
+    return symbols.concat(symbols, letters, digits);
+  })();
+
+  const dumpEl = document.getElementById('rcDump');
+  const feedEl = document.getElementById('rcFeed');
+  const pipsEl = document.getElementById('rcPips');
+  const attemptsLabelEl = document.getElementById('rcAttemptsLabel');
+  const newGameBtn = document.getElementById('rcNewGame');
+  const statPlayed = document.getElementById('rcStatPlayed');
+  const statWon = document.getElementById('rcStatWon');
+  const statLost = document.getElementById('rcStatLost');
+
+  if (!dumpEl || !feedEl || !pipsEl || !newGameBtn) return;
+
+  let words = [];
+  let secretIdx = 0;
+  let wordStates = [];
+  let pairUsed = {};
+  let attemptsLeft = ATTEMPTS_ALLOWED;
+  let roundOver = true;
+  let colArrays = [[], []];
+  let baseAddr = 0xF400;
+  let stats = { played: 0, won: 0, lost: 0 };
+
+  function sampleWords(arr, n){
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+    }
+    return copy.slice(0, n);
+  }
+
+  function likeness(a, b){
+    let n = 0;
+    for (let i = 0; i < a.length; i++){ if (a[i] === b[i]) n++; }
+    return n;
+  }
+
+  function escapeHtml(ch){
+    if (ch === '<') return '&lt;';
+    if (ch === '>') return '&gt;';
+    if (ch === '&') return '&amp;';
+    if (ch === '"') return '&quot;';
+    if (ch === "'") return '&#39;';
+    return ch;
+  }
+
+  function buildDump(wordList){
+    const total = ROWS * ROWLEN;
+    const cols = [new Array(total).fill(null), new Array(total).fill(null)];
+
+    wordList.forEach(function(word, wi){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = tries < 150 ? (wi % 2) : Math.floor(Math.random() * 2);
+        const row = Math.floor(Math.random() * ROWS);
+        const maxStart = ROWLEN - word.length;
+        if (maxStart < 0) break;
+        const startInRow = Math.floor(Math.random() * (maxStart + 1));
+        const start = row * ROWLEN + startInRow;
+        let ok = true;
+        for (let i = 0; i < word.length; i++){
+          if (cols[c][start + i] !== null){ ok = false; break; }
+        }
+        if (ok){
+          for (let i = 0; i < word.length; i++){
+            cols[c][start + i] = { ch: word[i], type: 'word', groupId: 'w' + wi, wordIndex: wi };
+          }
+          placed = true;
+        }
+      }
+    });
+
+    for (let p = 0; p < NUM_PAIRS; p++){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = p % 2 === 0 ? 0 : 1;
+        const type = PAIR_TYPES[Math.floor(Math.random() * PAIR_TYPES.length)];
+        const gap = 2 + Math.floor(Math.random() * 8);
+        const openIdx = Math.floor(Math.random() * (total - gap - 2));
+        const closeIdx = openIdx + gap + 1;
+        if (closeIdx >= total) continue;
+        if (cols[c][openIdx] !== null || cols[c][closeIdx] !== null) continue;
+        cols[c][openIdx] = { ch: type[0], type: 'bracket', groupId: 'p' + p, pairRole: 'open' };
+        cols[c][closeIdx] = { ch: type[1], type: 'bracket', groupId: 'p' + p, pairRole: 'close' };
+        placed = true;
+      }
+    }
+
+    for (let c = 0; c < 2; c++){
+      for (let i = 0; i < total; i++){
+        if (cols[c][i] === null){
+          cols[c][i] = { ch: JUNK_POOL[Math.floor(Math.random() * JUNK_POOL.length)], type: 'junk' };
+        }
+      }
+    }
+    return cols;
+  }
+
+  function renderCell(cell){
+    let cls = 'tc';
+    let attrs = '';
+    if (cell.type === 'word'){
+      cls += ' word';
+      const state = wordStates[cell.wordIndex];
+      if (state === 'correct') cls += ' correct';
+      if (state === 'tried_wrong') cls += ' disabled';
+      if (state === 'removed_dud') cls += ' disabled dud';
+      attrs = ' data-group="' + cell.groupId + '" data-role="word" data-widx="' + cell.wordIndex + '"';
+    } else if (cell.type === 'bracket'){
+      cls += ' bracket';
+      if (pairUsed[cell.groupId]) cls += ' used';
+      attrs = ' data-group="' + cell.groupId + '" data-role="bracket"';
+    } else {
+      cls += ' junk';
+      attrs = ' data-role="junk"';
+    }
+    return '<span class="' + cls + '"' + attrs + '>' + escapeHtml(cell.ch) + '</span>';
+  }
+
+  function renderDump(){
+    let html = '';
+    for (let c = 0; c < 2; c++){
+      html += '<div class="pipboy-col">';
+      for (let r = 0; r < ROWS; r++){
+        const addr = c === 0 ? (baseAddr + r * 0xC) : (baseAddr + ROWS * 0xC + r * 0xC);
+        const addrHex = '0x' + (addr & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        html += '<div class="term-row"><span class="term-addr">' + addrHex + '</span><span class="term-chars">';
+        for (let i = 0; i < ROWLEN; i++){
+          html += renderCell(colArrays[c][r * ROWLEN + i]);
+        }
+        html += '</span></div>';
+      }
+      html += '</div>';
+    }
+    dumpEl.innerHTML = html;
+  }
+
+  function renderPips(){
+    let html = '';
+    for (let i = 0; i < ATTEMPTS_ALLOWED; i++){
+      html += '<span class="pip' + (i < attemptsLeft ? '' : ' empty') + '"></span>';
+    }
+    pipsEl.innerHTML = html;
+    attemptsLabelEl.textContent = attemptsLeft + ' ATTEMPT(S) LEFT:';
+  }
+
+  function renderStats(){
+    statPlayed.textContent = stats.played;
+    statWon.textContent = stats.won;
+    statLost.textContent = stats.lost;
+  }
+
+  function addFeed(text, kind){
+    const line = document.createElement('div');
+    line.className = 'f-' + (kind || 'info');
+    line.textContent = text;
+    feedEl.appendChild(line);
+    feedEl.scrollTop = feedEl.scrollHeight;
+  }
+
+  function handleWordClick(idx){
+    if (roundOver || wordStates[idx] !== 'active') return;
+    const word = words[idx];
+    addFeed('>' + word, 'info');
+
+    if (idx === secretIdx){
+      wordStates[idx] = 'correct';
+      roundOver = true;
+      stats.played++; stats.won++;
+      addFeed('>Entry granted.', 'good');
+      renderStats();
+    } else {
+      wordStates[idx] = 'tried_wrong';
+      attemptsLeft--;
+      const l = likeness(word, words[secretIdx]);
+      addFeed('>Entry denied.', 'bad');
+      addFeed('>' + l + '/' + word.length + ' correct.', 'bad');
+      renderPips();
+      if (attemptsLeft <= 0){
+        roundOver = true;
+        stats.played++; stats.lost++;
+        addFeed('>Terminal locked.', 'bad');
+        addFeed('>Password was: ' + words[secretIdx], 'bad');
+        renderStats();
+      }
+    }
+    renderDump();
+  }
+
+  function handleBracketClick(gid){
+    if (roundOver || pairUsed[gid]) return;
+    pairUsed[gid] = true;
+
+    const activeWrong = [];
+    wordStates.forEach(function(s, i){ if (s === 'active' && i !== secretIdx) activeWrong.push(i); });
+
+    let effect = null;
+    if (attemptsLeft < ATTEMPTS_ALLOWED && (activeWrong.length === 0 || Math.random() < 0.5)){
+      effect = 'reset';
+    } else if (activeWrong.length > 0){
+      effect = 'dud';
+    } else if (attemptsLeft < ATTEMPTS_ALLOWED){
+      effect = 'reset';
+    }
+
+    if (effect === 'dud'){
+      const pick = activeWrong[Math.floor(Math.random() * activeWrong.length)];
+      wordStates[pick] = 'removed_dud';
+      addFeed('>Dud removed: ' + words[pick], 'good');
+    } else if (effect === 'reset'){
+      attemptsLeft = ATTEMPTS_ALLOWED;
+      renderPips();
+      addFeed('>Attempts reset!', 'good');
+    } else {
+      addFeed('>...', 'info');
+    }
+    renderDump();
+  }
+
+  dumpEl.addEventListener('click', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (!el) return;
+    const role = el.getAttribute('data-role');
+    if (role === 'word'){
+      handleWordClick(parseInt(el.getAttribute('data-widx'), 10));
+    } else if (role === 'bracket'){
+      handleBracketClick(el.getAttribute('data-group'));
+    }
+  });
+
+  function setHighlight(el, on){
+    const gid = el.getAttribute('data-group');
+    if (gid){
+      const nodes = dumpEl.querySelectorAll('[data-group="' + gid.replace(/"/g, '\\"') + '"]');
+      Array.prototype.forEach.call(nodes, function(n){ n.classList.toggle('hl', on); });
+    } else {
+      el.classList.toggle('hl', on);
+    }
+  }
+
+  dumpEl.addEventListener('mouseover', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, true);
+  });
+  dumpEl.addEventListener('mouseout', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, false);
+  });
+
+  function newGame(){
+    words = sampleWords(WORD_POOL, 8);
+    secretIdx = Math.floor(Math.random() * words.length);
+    wordStates = words.map(function(){ return 'active'; });
+    pairUsed = {};
+    attemptsLeft = ATTEMPTS_ALLOWED;
+    roundOver = false;
+    baseAddr = 0xF400 + Math.floor(Math.random() * 20) * 0xC;
+    colArrays = buildDump(words);
+    feedEl.innerHTML = '';
+    renderPips();
+    renderDump();
+  }
+
+  newGameBtn.addEventListener('click', newGame);
   renderStats();
   newGame();
 })();
