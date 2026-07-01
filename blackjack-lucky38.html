@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The House Always Wins — Lucky 38 Blackjack — Jordan Flaum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --gold: #E3B341;
+  --red-suit: #D6394A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* NAV */
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+
+/* HEADER */
+.header { margin-bottom: 2.5rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.75rem 2rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+.name-block { margin-top: 1.25rem; }
+.name-big { font-family: var(--sans); font-size: clamp(26px,4.6vw,40px); font-weight: 800; color: #E1F5EE; letter-spacing: -1.5px; line-height: 1.1; }
+.name-big em { color: var(--gold); font-style: normal; }
+.title-line { font-family: var(--mono); font-size: 13px; color: #9FE1CB; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.blink { animation: blink 1s step-end infinite; color: #5DCAA5; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* SECTIONS */
+.section { margin-bottom: 2.25rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; }
+.section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+/* CONTENT CARDS */
+.content-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 1rem;
+}
+.content-card h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
+.content-card p:last-child { margin-bottom: 0; }
+code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
+
+/* STEP LIST */
+.step-list { list-style: none; margin: 0.5rem 0; counter-reset: step; }
+.step-list li { font-size: 14px; color: var(--muted); line-height: 1.65; padding: 14px 0 14px 22px; position: relative; border-top: 0.5px solid var(--border); }
+.step-list li:first-child { border-top: none; }
+.step-list li::before { content: '›'; position: absolute; left: 2px; color: var(--green); font-size: 18px; line-height: 1.4; }
+.step-list li strong { color: var(--text); display: block; font-size: 15px; margin-bottom: 4px; }
+.step-list li code.inline { background: var(--bg3); padding: 1px 5px; border-radius: 3px; }
+
+/* CODE BLOCK */
+.code-wrap { position: relative; }
+.code-block {
+  background: #04342C; border: 0.5px solid #0F6E56; border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem; font-family: var(--mono); font-size: 12px; color: #E1F5EE;
+  margin: 0.75rem 0; overflow-x: auto; line-height: 1.6; white-space: pre;
+  max-height: 560px; overflow-y: auto;
+}
+.copy-btn {
+  position: absolute; top: 12px; right: 12px; font-family: var(--mono); font-size: 11px;
+  background: rgba(255,255,255,0.06); border: 0.5px solid #0F6E56; color: #9FE1CB;
+  padding: 6px 12px; border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.copy-btn:hover { background: var(--green); color: #04342C; }
+.copy-btn.copied { background: var(--gold); color: #04342C; border-color: var(--gold); }
+
+/* TAGS */
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.tag { font-family: var(--mono); font-size: 11px; background: var(--bg3); border: 0.5px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; }
+
+/* ALERT */
+.alert { background: var(--bg3); border: 0.5px solid var(--border); border-left: 3px solid #EF9F27; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0.75rem 0; }
+.alert strong { color: #EF9F27; }
+
+/* ── CASINO GAME ── */
+.felt {
+  background: radial-gradient(ellipse at top, #0a4a3c 0%, #04342C 70%);
+  border: 1px solid #0F6E56; border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem; position: relative; overflow: hidden;
+}
+.felt::before {
+  content: '♠ ♥ ♦ ♣'; position: absolute; top: 10px; right: 18px;
+  font-size: 13px; letter-spacing: 6px; color: rgba(225,245,238,0.15);
+  font-family: var(--sans); font-weight: 800;
+}
+.table-title { font-family: var(--mono); font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; text-align: center; margin-bottom: 1.5rem; }
+.area { margin-bottom: 1.6rem; }
+.area-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--mono); font-size: 11px; color: #9FE1CB; text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 10px;
+}
+.score-pill { font-family: var(--mono); font-size: 13px; color: #04342C; background: #E1F5EE; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+.card-row { display: flex; gap: 8px; min-height: 96px; flex-wrap: wrap; align-items: flex-start; }
+.playing-card {
+  width: 58px; height: 84px; background: #fdfcf9; border-radius: 6px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 6px; font-family: var(--sans); font-weight: 800;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.45);
+  animation: dealIn 0.25s ease-out;
+}
+@keyframes dealIn { from { opacity: 0; transform: translateY(-10px) rotate(-4deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+.playing-card.red { color: var(--red-suit); }
+.playing-card.black { color: #1a1a18; }
+.playing-card .rank-top { font-size: 13px; line-height: 1; }
+.playing-card .suit-center { font-size: 20px; align-self: center; line-height: 1; }
+.playing-card .rank-bottom { font-size: 13px; align-self: flex-end; transform: rotate(180deg); line-height: 1; }
+.game-result { font-family: var(--mono); font-size: 15px; color: var(--gold); text-align: center; min-height: 22px; margin: 0.25rem 0 1rem; }
+.game-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.game-btn {
+  font-family: var(--mono); font-size: 13px; background: transparent;
+  border: 0.5px solid var(--green-glow); color: var(--green-glow);
+  padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.game-btn:hover:not(:disabled) { background: var(--green-glow); color: #04342C; }
+.game-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.game-btn.primary { border-color: var(--gold); color: var(--gold); }
+.game-btn.primary:hover:not(:disabled) { background: var(--gold); color: #04342C; }
+.game-stats {
+  font-family: var(--mono); font-size: 11px; color: #9FE1CB; display: flex; gap: 16px;
+  flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; padding-top: 1.1rem;
+  border-top: 0.5px solid rgba(225,245,238,0.15);
+}
+.game-stats span b { color: var(--gold); }
+.house-line { font-family: var(--mono); font-size: 10px; color: rgba(225,245,238,0.4); text-align: center; margin-top: 10px; letter-spacing: 1px; }
+
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .terminal-body { padding: 1.25rem; }
+  .playing-card { width: 48px; height: 70px; }
+  .code-block { font-size: 10.5px; }
+}
+
+/* ── CRT / RETRO TERMINAL EFFECTS ── */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.82; }
+  94% { opacity: 1; }
+  96% { opacity: 0.88; }
+  97% { opacity: 1; }
+}
+@keyframes scanmove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+@keyframes phosphorPulse {
+  0%, 100% { text-shadow: 0 0 6px rgba(93,202,165,0.55), 0 0 14px rgba(93,202,165,0.25); }
+  50% { text-shadow: 0 0 9px rgba(93,202,165,0.8), 0 0 20px rgba(93,202,165,0.4); }
+}
+@keyframes cursorBlink { 50% { opacity: 0; } }
+
+.felt.crt {
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.65), inset 0 0 40px rgba(0,0,0,0.5), 0 0 0 1px #0F6E56;
+  animation: flicker 6s infinite;
+}
+.felt.crt::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; border-radius: var(--radius-lg);
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(225,245,238,0.05) 0px,
+    rgba(225,245,238,0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  animation: scanmove 6s linear infinite;
+}
+.felt.crt .table-title,
+.felt.crt .name-big,
+.felt.crt .area-label span:first-child {
+  animation: phosphorPulse 3.2s ease-in-out infinite;
+}
+.felt.crt .score-pill { text-shadow: none; }
+
+/* Boot sequence overlay */
+#bootOverlay {
+  position: fixed; inset: 0; background: #020a08; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#bootOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+#bootOverlay::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom, rgba(93,202,165,0.06) 0px, rgba(93,202,165,0.06) 1px,
+    transparent 1px, transparent 3px
+  );
+}
+.boot-text {
+  font-family: var(--mono); font-size: 13px; color: #5DCAA5;
+  max-width: 520px; width: 90%; line-height: 1.9;
+  text-shadow: 0 0 8px rgba(93,202,165,0.6);
+}
+.boot-text .boot-line { opacity: 0; animation: bootIn 0.15s forwards; }
+.boot-cursor { display: inline-block; width: 8px; height: 14px; background: #5DCAA5; vertical-align: middle; margin-left: 2px; animation: cursorBlink 0.8s step-end infinite; }
+@keyframes bootIn { to { opacity: 1; } }
+
+@media (max-width: 480px) {
+  .felt.crt::after { animation-duration: 8s; }
+}
+
+  </style>
+</head>
+<body>
+<div id="bootOverlay">
+  <div class="boot-text" id="bootText"></div>
+</div>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">← portfolio</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">blackjack-lucky38</span>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title">~/projects/lucky38-blackjack — bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@cyberlab</span>:~$ <span class="cmd">python3 lucky38_blackjack.py</span></div>
+      <div class="name-block">
+        <div class="name-big">The House <em>Always Wins</em></div>
+        <div class="title-line">Lucky 38 Blackjack · Python · Tkinter <span class="blink">█</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>A desktop Blackjack game built in Python with Tkinter, themed after the Lucky 38 Casino from <em>Fallout: New Vegas</em>. Full deck and shuffle logic, Ace-aware scoring, an automatic dealer, and running win/loss statistics.</p>
+      <p>The version below is a browser-playable recreation of the same rules and scoring logic — built in JavaScript since Tkinter can't run in a browser — so you can actually sit down at the table. The original Python source is further down, along with a full walkthrough of how it was built.</p>
+      <div class="tag-row">
+        <span class="tag">Python</span><span class="tag">Tkinter</span><span class="tag">Game Logic</span><span class="tag">CLI → GUI</span><span class="tag">State Management</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// play</span><div class="section-line"></div></div>
+
+    <div class="felt crt">
+      <div class="table-title">Lucky 38 Casino Presents Blackjack</div>
+
+      <div class="area">
+        <div class="area-label"><span>Dealer</span><span class="score-pill" id="dealerScore">0</span></div>
+        <div class="card-row" id="dealerRow"></div>
+      </div>
+
+      <div class="area">
+        <div class="area-label"><span>Player</span><span class="score-pill" id="playerScore">0</span></div>
+        <div class="card-row" id="playerRow"></div>
+      </div>
+
+      <div class="game-result" id="gameResult"></div>
+
+      <div class="game-controls">
+        <button class="game-btn" id="btnHit">Hit</button>
+        <button class="game-btn" id="btnStand">Stand</button>
+        <button class="game-btn primary" id="btnNewGame">New Game</button>
+      </div>
+
+      <div class="game-stats">
+        <span>Played: <b id="statPlayed">0</b></span>
+        <span>Won: <b id="statWon">0</b></span>
+        <span>Lost: <b id="statLost">0</b></span>
+        <span>21s: <b id="statBJ">0</b></span>
+      </div>
+      <div class="house-line">// no real money involved — the house edge is purely mathematical here</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// how it works</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>Step by step, here's how the original Python/Tkinter version was put together:</p>
+    </div>
+    <ol class="step-list">
+      <li>
+        <strong>1. Set up the Tkinter window and layout grid</strong>
+        Created the main <code class="inline">tkinter.Tk()</code> window, sized it, gave it a black background to sell the casino look, and laid out a column grid so the dealer area, player area, and buttons would all line up predictably regardless of window size.
+      </li>
+      <li>
+        <strong>2. Load the card images</strong>
+        <code class="inline">load_images()</code> loops through all four suits and, for each one, loads number cards 1–10 plus the three face cards (jack, queen, king) as <code class="inline">PhotoImage</code> objects, storing each as a <code class="inline">(value, image)</code> tuple. Face cards are all stored with a value of 10, matching standard Blackjack rules.
+      </li>
+      <li>
+        <strong>3. Build and shuffle the deck</strong>
+        The loaded card tuples get combined into a single <code class="inline">deck</code> list and shuffled with <code class="inline">random.shuffle()</code>. <code class="inline">_deal_card()</code> pops a card off the top, immediately appends it back to the bottom, and drops the image into a <code class="inline">Label</code> widget so it renders in the UI — the same list doubles as both the shuffled shoe and the render queue.
+      </li>
+      <li>
+        <strong>4. Write the scoring logic</strong>
+        <code class="inline">score_hand()</code> is the trickiest part: it walks each card in a hand, and only the <em>first</em> Ace encountered is allowed to count as 11 instead of 1. If that would bust the hand (score over 21), it subtracts 10 back off and locks the Ace flag so it can't be re-used. Every other Ace just counts as 1.
+      </li>
+      <li>
+        <strong>5. Wire up Hit and Stand</strong>
+        <code class="inline">deal_player()</code> (bound to the Hit button) deals one card to the player and re-checks the score for a bust. <code class="inline">deal_dealer()</code> (bound to Stand) plays the dealer's hand out automatically — hitting on anything below 17 — then compares both scores to decide the winner and updates the running <code class="inline">games_played</code> / <code class="inline">games_won</code> / <code class="inline">games_lost</code> counters.
+      </li>
+      <li>
+        <strong>6. Handle New Game resets</strong>
+        Rather than tracking and destroying individual card <code class="inline">Label</code> widgets one by one, <code class="inline">new_game()</code> just destroys the entire <code class="inline">dealer_card_frame</code> / <code class="inline">player_card_frame</code> container and rebuilds a fresh empty one — the simplest way to clear a hand's worth of images in one call.
+      </li>
+      <li>
+        <strong>7. Surface game statistics</strong>
+        Instead of a separate stats panel, <code class="inline">update_window_title()</code> writes the running totals straight into the window's title bar after every round, so the stats are always visible without taking up any table space.
+      </li>
+    </ol>
+    <div class="alert"><strong>Worth noting:</strong> the original code builds its shoe from three combined 52-card decks rather than one, and the button labeled "Game Over" is actually wired to a function named <code class="inline">shuffle()</code> that shows a stats popup and closes the window — a couple of quirks left in on purpose so the walkthrough matches the real source below.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// the code</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>The full, unedited Python source — copy and paste it straight into a <code class="inline">lucky38_blackjack.py</code> file to run it locally (you'll need your own <code class="inline">cards/</code> folder of card images alongside it).</p>
+    </div>
+    <div class="code-wrap">
+      <button class="copy-btn" id="copyCodeBtn">// copy code</button>
+      <pre class="code-block" id="pythonCode">import random
+import tkinter as tk
+from tkinter import messagebox
+
+try:
+    import tkinter
+except ImportError:
+    import Tkinter as tkinter
+
+
+def load_images(card_images):
+    suits = [&#x27;heart&#x27;, &#x27;club&#x27;, &#x27;diamond&#x27;, &#x27;spade&#x27;]
+    face_cards = [&#x27;jack&#x27;, &#x27;queen&#x27;, &#x27;king&#x27;]
+
+    if tkinter.TkVersion &gt;= 8.6:
+        extension = &#x27;png&#x27;
+    else:
+        extension = &#x27;ppm&#x27;
+
+    # for each suit, retrieve the image for the cards
+    for suit in suits:
+        # first the number cards 1 to 10
+        for card in range(1, 11):
+            name = &#x27;cards/{}_{}.{}&#x27;.format(str(card), suit, extension)
+            image = tkinter.PhotoImage(file=name)
+            card_images.append((card, image, ))
+
+        # next the face cards
+        for card in face_cards:
+            name = &#x27;cards/{}_{}.{}&#x27;.format(str(card), suit, extension)
+            image = tkinter.PhotoImage(file=name)
+            card_images.append((10, image, ))
+
+
+def _deal_card(frame):
+    # pop the next card off the top of the deck
+    next_card = deck.pop(0)  # Use 0 to take card from top of deck
+    # and add it back to the deck
+    deck.append(next_card)
+    # add the image to a label and display the label
+    tkinter.Label(frame, image=next_card[1], relief=&quot;raised&quot;).pack(side=&quot;left&quot;)
+    # now return the card&#x27;s face value
+    return next_card
+
+
+def score_hand(hand):
+    # Calculate the total score of all cards in the list
+    # Only one ace an have the value 11 and this will be reduce to 1 if the hand would bust
+    score = 0
+    ace = False
+    for next_card in hand:
+        card_value = next_card[0]
+        if card_value == 1 and not ace:
+            ace = True
+            card_value = 11
+        score += card_value
+        # if we would bust, check if there is an ace and subtract 10
+        if score &gt; 21 and ace:
+            score -= 10
+            ace = False
+    return score
+
+
+def deal_dealer():
+    global games_played, games_won, games_lost, twenty_ones_scored
+
+    dealer_score = score_hand(dealer_hand)
+    while 0 &lt; dealer_score &lt; 17:
+        dealer_hand.append(_deal_card(dealer_card_frame))
+        dealer_score = score_hand(dealer_hand)
+        dealer_score_label.set(dealer_score)
+
+    player_score = score_hand(player_hand)
+    if player_score &gt; 21:
+        result_text.set(&quot;Dealer wins!&quot;)
+        games_lost += 1
+    elif dealer_score &gt; 21 or dealer_score &lt; player_score:
+        result_text.set(&quot;Player wins!&quot;)
+        games_won += 1
+    elif dealer_score &gt; player_score:
+        result_text.set(&quot;Dealer wins!&quot;)
+        games_lost += 1
+    else:
+        result_text.set(&quot;Draw!&quot;)
+
+    games_played += 1
+
+    if player_score == 21:
+        twenty_ones_scored += 1
+
+    # Update the game statistics in the main window title
+    update_window_title()
+
+
+def deal_player():
+    player_hand.append(_deal_card(player_card_frame))
+    player_score = score_hand(player_hand)
+
+    player_score_label.set(player_score)
+    if player_score &gt; 21:
+        result_text.set(&quot;Dealer Wins!&quot;)
+
+
+def initial_deal():
+    deal_player()
+    dealer_hand.append(_deal_card(dealer_card_frame))
+    dealer_score_label.set(score_hand(dealer_hand))
+    deal_player()
+
+
+def new_game():
+    global dealer_card_frame
+    global player_card_frame
+    global dealer_hand
+    global player_hand
+    # embedded frame to hold the card images
+    dealer_card_frame.destroy()
+    dealer_card_frame = tkinter.Frame(card_frame, bg=&quot;black&quot;)
+    dealer_card_frame.grid(row=0, column=1, sticky=&#x27;ew&#x27;, rowspan=2)
+
+    # embedded frame to hold the card images
+    player_card_frame.destroy()
+    player_card_frame = tkinter.Frame(card_frame, bg=&quot;black&quot;)
+    player_card_frame.grid(row=2, column=1, sticky=&#x27;ew&#x27;, rowspan=2)
+
+    result_text.set(&quot;&quot;)
+
+    # Create the list to store the dealer&#x27;s and player&#x27;s hands
+    dealer_hand = []
+    player_hand = []
+    initial_deal()
+
+
+def shuffle():
+    global games_played, games_won, games_lost, twenty_ones_scored
+    messagebox.showinfo(&quot;Game Statistics&quot;, 
+                        f&quot;Games played: {games_played}\n&quot;
+                        f&quot;Games won: {games_won}\n&quot;
+                        f&quot;Games lost: {games_lost}\n&quot;
+                        f&quot;Number of 21s scored: {twenty_ones_scored}&quot;)
+    mainWindow.destroy()
+
+
+def play():
+    initial_deal()
+    mainWindow.mainloop()
+
+
+mainWindow = tkinter.Tk()
+
+# Set up the screen and frames for the dealer and player
+mainWindow.title(&quot;LUCKY 38 CASINO PRESENTS BLACKJACK&quot;)
+mainWindow.geometry(&quot;640x480&quot;)
+mainWindow.configure(bg=&quot;black&quot;)
+
+mainWindow.columnconfigure(0, weight=2)
+mainWindow.columnconfigure(1, weight=2)
+mainWindow.columnconfigure(2, weight=2)
+mainWindow.columnconfigure(3, weight=0)
+mainWindow.columnconfigure(4, weight=5)
+mainWindow.columnconfigure(5, weight=0)
+
+
+result_text = tkinter.StringVar()
+result = tkinter.Label(mainWindow, textvariable=result_text)
+result.grid(row=0, column=0, columnspan=3)
+
+card_frame = tkinter.Frame(mainWindow, relief=&quot;sunken&quot;, borderwidth=1, bg=&quot;black&quot;)
+card_frame.grid(row=1, column=0, sticky=&#x27;ew&#x27;, columnspan=3, rowspan=2)
+
+dealer_score_label = tkinter.IntVar()
+tkinter.Label(card_frame, text=&quot;Dealer&quot;, bg=&quot;black&quot;, fg=&quot;white&quot;).grid(row=0, column=0)
+tkinter.Label(card_frame, textvariable=dealer_score_label, bg=&quot;black&quot;, fg=&quot;white&quot;).grid(row=1, column=0)
+# embedded frame to hold the card images
+dealer_card_frame = tkinter.Frame(card_frame, bg=&quot;black&quot;)
+dealer_card_frame.grid(row=0, column=1, sticky=&#x27;ew&#x27;, rowspan=2)
+
+player_score_label = tkinter.IntVar()
+
+tkinter.Label(card_frame, text=&quot;Player&quot;, bg=&quot;black&quot;, fg=&quot;white&quot;).grid(row=2, column=0)
+tkinter.Label(card_frame, textvariable=player_score_label, bg=&quot;black&quot;, fg=&quot;white&quot;).grid(row=3, column=0)
+# embedded frame to hold the card images
+player_card_frame = tkinter.Frame(card_frame, bg=&quot;black&quot;)
+player_card_frame.grid(row=2, column=1, sticky=&#x27;ew&#x27;, rowspan=2)
+
+button_frame = tkinter.Frame(mainWindow)
+button_frame.grid(row=3, column=1, columnspan=3, sticky=&#x27;w&#x27;)
+
+player_button = tkinter.Button(button_frame, text=&quot;Hit&quot;, command=deal_player, padx=8)
+player_button.grid(row=0, column=0)
+
+dealer_button = tkinter.Button(button_frame, text=&quot;Stand&quot;, command=deal_dealer, padx=5)
+dealer_button.grid(row=0, column=1)
+
+reset_button = tkinter.Button(button_frame, text=&quot;New Game&quot;, command=new_game)
+reset_button.grid(row=0, column=2)
+
+shuffle_button = tkinter.Button(button_frame, text=&quot;Game Over&quot;, command=shuffle, padx=2)
+shuffle_button.grid(row=0, column=3)
+
+
+# load cards
+cards = []
+load_images(cards)
+print(cards)
+# Create a new deck of cards and shuffle them
+deck = list(cards) + list(cards) + list(cards)
+random.shuffle(deck)
+
+# Create the list to store the dealer&#x27;s and player&#x27;s hands
+dealer_hand = []
+player_hand = []
+
+# Initialize game statistics
+games_played = 0
+games_won = 0
+games_lost = 0
+twenty_ones_scored = 0
+
+# Function to update the window title with game statistics
+def update_window_title():
+    mainWindow.title(f&quot;LUCKY 38 CASINO PRESENTS BLACKJACK | Games played: {games_played}, Games won: {games_won}, Games lost: {games_lost}, 21s scored: {twenty_ones_scored}&quot;)
+
+# Initialize window title with initial game statistics
+update_window_title()
+
+if __name__ == &quot;__main__&quot;:
+    play()
+
+mainWindow.mainloop()
+</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// why python</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>Python is the language I keep coming back to. It gets out of the way — I can go from an idea to something running on screen in the same sitting, which matters a lot when I'm learning by building instead of by reading. This project is a good example: the scoring logic, the state handling, the UI — none of it fought me the way lower-level languages tend to.</p>
+      <p>It's also the language behind most of the security tooling I want to get better at. A lot of what interests me in cybersecurity — automation, log parsing, quick proof-of-concept scripts, eventually contributing to or building my own tools — runs on Python underneath. Projects like this one are how I build the muscle memory for that: not flashy, but real practice with state, logic, and edge cases that carries over directly into more serious work.</p>
+      <p>I want to keep going with it — proper classes and object-oriented structure instead of leaning on globals, unit testing my logic instead of just playtesting it by hand, and eventually branching into the libraries that show up most in security work (requests, scapy, pandas for log analysis). This project is one small step in that direction.</p>
+    </div>
+  </div>
+
+  <div class="footer">// jordan flaum &nbsp;·&nbsp; <a href="readme.html?doc=README-blackjack-lucky38.md" style="color:var(--green);text-decoration:none;">// README</a> &nbsp;·&nbsp; <a href="index.html" style="color:var(--green);text-decoration:none;">← back to portfolio</a></div>
+
+</div>
+
+<script>
+(function(){
+  const SUITS = [
+    { key: 'heart', symbol: '♥', color: 'red' },
+    { key: 'diamond', symbol: '♦', color: 'red' },
+    { key: 'club', symbol: '♣', color: 'black' },
+    { key: 'spade', symbol: '♠', color: 'black' }
+  ];
+
+  let deck = [];
+  let playerHand = [];
+  let dealerHand = [];
+  let roundOver = true;
+  let stats = { played: 0, won: 0, lost: 0, blackjacks: 0 };
+
+  function buildDeck(){
+    const d = [];
+    SUITS.forEach(function(suit){
+      for (let r = 1; r <= 10; r++){
+        d.push({ value: r, label: r === 1 ? 'A' : String(r), suit: suit });
+      }
+      ['J','Q','K'].forEach(function(label){
+        d.push({ value: 10, label: label, suit: suit });
+      });
+    });
+    return d;
+  }
+
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function dealCard(hand){
+    if (deck.length === 0){ deck = shuffle(buildDeck()); }
+    hand.push(deck.pop());
+  }
+
+  function scoreHand(hand){
+    let score = 0, ace = false;
+    hand.forEach(function(c){
+      let v = c.value;
+      if (v === 1 && !ace){ ace = true; v = 11; }
+      score += v;
+      if (score > 21 && ace){ score -= 10; ace = false; }
+    });
+    return score;
+  }
+
+  function cardHTML(c){
+    return '<div class="playing-card ' + c.suit.color + '">' +
+      '<span class="rank-top">' + c.label + '</span>' +
+      '<span class="suit-center">' + c.suit.symbol + '</span>' +
+      '<span class="rank-bottom">' + c.label + '</span>' +
+      '</div>';
+  }
+
+  const dealerRow = document.getElementById('dealerRow');
+  const playerRow = document.getElementById('playerRow');
+  const dealerScoreEl = document.getElementById('dealerScore');
+  const playerScoreEl = document.getElementById('playerScore');
+  const resultEl = document.getElementById('gameResult');
+  const btnHit = document.getElementById('btnHit');
+  const btnStand = document.getElementById('btnStand');
+  const btnNewGame = document.getElementById('btnNewGame');
+
+  function render(){
+    dealerRow.innerHTML = dealerHand.map(cardHTML).join('');
+    playerRow.innerHTML = playerHand.map(cardHTML).join('');
+    dealerScoreEl.textContent = scoreHand(dealerHand);
+    playerScoreEl.textContent = scoreHand(playerHand);
+  }
+
+  function renderStats(){
+    document.getElementById('statPlayed').textContent = stats.played;
+    document.getElementById('statWon').textContent = stats.won;
+    document.getElementById('statLost').textContent = stats.lost;
+    document.getElementById('statBJ').textContent = stats.blackjacks;
+  }
+
+  function setControls(enabled){
+    btnHit.disabled = !enabled;
+    btnStand.disabled = !enabled;
+  }
+
+  function endRound(outcome){
+    roundOver = true;
+    stats.played++;
+    if (outcome === 'player'){
+      stats.won++;
+      resultEl.textContent = 'Player wins!';
+    } else if (outcome === 'dealer'){
+      stats.lost++;
+      resultEl.textContent = 'Dealer wins!';
+    } else {
+      resultEl.textContent = "Draw!";
+    }
+    if (scoreHand(playerHand) === 21){ stats.blackjacks++; }
+    renderStats();
+    setControls(false);
+  }
+
+  function hit(){
+    if (roundOver) return;
+    dealCard(playerHand);
+    render();
+    if (scoreHand(playerHand) > 21){
+      endRound('dealer');
+    }
+  }
+
+  function stand(){
+    if (roundOver) return;
+    let dScore = scoreHand(dealerHand);
+    while (dScore > 0 && dScore < 17){
+      dealCard(dealerHand);
+      dScore = scoreHand(dealerHand);
+    }
+    render();
+    const pScore = scoreHand(playerHand);
+    let outcome;
+    if (pScore > 21){ outcome = 'dealer'; }
+    else if (dScore > 21 || dScore < pScore){ outcome = 'player'; }
+    else if (dScore > pScore){ outcome = 'dealer'; }
+    else { outcome = 'push'; }
+    endRound(outcome);
+  }
+
+  function newGame(){
+    deck = shuffle(buildDeck());
+    playerHand = [];
+    dealerHand = [];
+    roundOver = false;
+    resultEl.textContent = '';
+    dealCard(playerHand);
+    dealCard(dealerHand);
+    dealCard(playerHand);
+    render();
+    setControls(true);
+    if (scoreHand(playerHand) === 21){
+      endRound('player');
+    }
+  }
+
+  btnHit.addEventListener('click', hit);
+  btnStand.addEventListener('click', stand);
+  btnNewGame.addEventListener('click', newGame);
+
+  renderStats();
+  newGame();
+})();
+
+document.getElementById('copyCodeBtn').addEventListener('click', function(){
+  const code = document.getElementById('pythonCode').textContent;
+  const btn = this;
+  navigator.clipboard.writeText(code).then(function(){
+    btn.textContent = '// copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){
+      btn.textContent = '// copy code';
+      btn.classList.remove('copied');
+    }, 1800);
+  }).catch(function(){
+    btn.textContent = '// copy failed';
+    setTimeout(function(){ btn.textContent = '// copy code'; }, 1800);
+  });
+});
+
+(function(){
+  const lines = [
+    'LUCKY 38 GAMING TERMINAL',
+    'INITIALIZING CASINO MAINFRAME...',
+    'LOADING CARD DECK.......... OK',
+    'CALIBRATING DEALER LOGIC... OK',
+    'HOUSE EDGE................. ACTIVE',
+    'STATUS: TABLE OPEN. GOOD LUCK, PLAYER.'
+  ];
+  const el = document.getElementById('bootText');
+  const overlay = document.getElementById('bootOverlay');
+
+  if (!el || !overlay) return;
+
+  if (sessionStorage.getItem('lucky38-booted')) {
+    overlay.classList.add('hidden');
+    return;
+  }
+
+  let delay = 0;
+  lines.forEach(function(line, i){
+    setTimeout(function(){
+      const div = document.createElement('div');
+      div.className = 'boot-line';
+      div.textContent = line;
+      if (i === lines.length - 1) {
+        const cursor = document.createElement('span');
+        cursor.className = 'boot-cursor';
+        div.appendChild(cursor);
+      }
+      el.appendChild(div);
+    }, delay);
+    delay += 280 + line.length * 6;
+  });
+
+  setTimeout(function(){
+    overlay.classList.add('hidden');
+    sessionStorage.setItem('lucky38-booted', '1');
+  }, delay + 700);
+})();
+</script>
+
+</body>
+</html>

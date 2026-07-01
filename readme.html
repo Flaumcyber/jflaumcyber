@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README — Jordan Flaum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* NAV */
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+.nav-right { margin-left: auto; }
+
+/* HEADER */
+.header { margin-bottom: 2rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.25rem 1.75rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+
+/* MARKDOWN CONTENT CARD */
+.md-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 2rem 2.25rem;
+}
+.md-content h1 {
+  font-family: var(--sans); font-weight: 800; font-size: 26px; color: var(--text);
+  letter-spacing: -0.5px; margin-bottom: 0.5rem; line-height: 1.25;
+}
+.md-content h1 + p em, .md-content > p:first-of-type strong { color: var(--green); }
+.md-content h2 {
+  font-family: var(--mono); font-size: 12px; color: var(--green); text-transform: uppercase;
+  letter-spacing: 2px; margin: 2rem 0 0.9rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border);
+}
+.md-content h2:first-of-type { margin-top: 1.5rem; padding-top: 0; border-top: none; }
+.md-content h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 1.25rem 0 0.5rem; }
+.md-content p { font-size: 14.5px; color: var(--muted); line-height: 1.8; margin-bottom: 0.9rem; }
+.md-content ul, .md-content ol { margin: 0.5rem 0 1rem 0; padding-left: 1.4rem; }
+.md-content li { font-size: 14.5px; color: var(--muted); line-height: 1.75; margin-bottom: 0.4rem; }
+.md-content li::marker { color: var(--green); }
+.md-content strong { color: var(--text); font-weight: 700; }
+.md-content em { color: var(--green-glow); font-style: italic; }
+.md-content a { color: var(--green); text-decoration: none; border-bottom: 0.5px solid var(--green); }
+.md-content a:hover { color: var(--green-glow); }
+.md-content code {
+  font-family: var(--mono); font-size: 12.5px; background: var(--bg3);
+  padding: 2px 6px; border-radius: 4px; color: var(--green);
+}
+.md-content pre {
+  background: #04342C; border: 0.5px solid #0F6E56; border-radius: var(--radius-md);
+  padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0 1.1rem;
+}
+.md-content pre code { background: none; color: #E1F5EE; padding: 0; }
+.md-content blockquote {
+  border-left: 3px solid var(--green-dim); margin: 0.75rem 0 1.1rem; padding: 0.25rem 0 0.25rem 1rem;
+  color: var(--muted); font-style: italic;
+}
+.md-content hr { border: none; border-top: 0.5px solid var(--border); margin: 1.75rem 0; }
+
+.state-msg { font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 2rem 0; text-align: center; }
+.state-msg a { color: var(--green); }
+
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .md-card { padding: 1.5rem 1.4rem; }
+  .terminal-body { padding: 1rem 1.25rem; }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">← portfolio</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">readme</span>
+    <a class="nav-right" id="rawLink" href="#" target="_blank" rel="noopener">// view raw</a>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title" id="termTitle">~/readme — bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@cyberportfolio</span>:~$ <span class="cmd" id="catCmd">cat README.md</span></div>
+    </div>
+  </div>
+
+  <div class="md-card">
+    <div class="md-content" id="mdContent">
+      <div class="state-msg">// loading readme...</div>
+    </div>
+  </div>
+
+  <div class="footer">// jordan flaum &nbsp;·&nbsp; <a href="index.html" style="color:var(--green);text-decoration:none;">← back to portfolio</a></div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const doc = params.get('doc');
+  const contentEl = document.getElementById('mdContent');
+  const rawLink = document.getElementById('rawLink');
+  const catCmd = document.getElementById('catCmd');
+  const termTitle = document.getElementById('termTitle');
+
+  if (!doc) {
+    contentEl.innerHTML = '<div class="state-msg">No README specified. Try a link like <code>readme.html?doc=README-active-directory.md</code>.</div>';
+    rawLink.style.display = 'none';
+    return;
+  }
+
+  // basic safety: only allow local .md files, no external URLs or path traversal
+  const safe = /^[A-Za-z0-9._-]+\.md$/.test(doc);
+  if (!safe) {
+    contentEl.innerHTML = '<div class="state-msg">Invalid README reference.</div>';
+    rawLink.style.display = 'none';
+    return;
+  }
+
+  rawLink.href = doc;
+  catCmd.textContent = 'cat ' + doc;
+  termTitle.textContent = '~/' + doc + ' — bash';
+  document.title = doc.replace(/\.md$/, '').replace(/-/g, ' ') + ' — Jordan Flaum';
+
+  fetch(doc)
+    .then(function(res){
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then(function(text){
+      if (typeof marked !== 'undefined') {
+        contentEl.innerHTML = marked.parse(text);
+      } else {
+        // fallback: render as plain text if marked.js failed to load
+        const pre = document.createElement('pre');
+        pre.textContent = text;
+        contentEl.innerHTML = '';
+        contentEl.appendChild(pre);
+      }
+    })
+    .catch(function(err){
+      contentEl.innerHTML = '<div class="state-msg">Couldn\'t load <code>' + doc + '</code>. ' +
+        'If you\'re viewing this file locally (double-clicked instead of via a server), browsers block this — try it on the live GitHub Pages site instead, or ' +
+        '<a href="' + doc + '">open the raw file directly</a>.</div>';
+    });
+})();
+</script>
+
+</body>
+</html>
