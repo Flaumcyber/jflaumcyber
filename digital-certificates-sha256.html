@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Certificates & SHA-256 — Jordan Flaum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* NAV */
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+
+/* HEADER */
+.header { margin-bottom: 2.5rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.75rem 2rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+.name-block { margin-top: 1.25rem; }
+.name-big { font-family: var(--sans); font-size: clamp(24px,4.2vw,36px); font-weight: 800; color: #E1F5EE; letter-spacing: -1px; line-height: 1.15; }
+.name-big em { color: #5DCAA5; font-style: normal; }
+.title-line { font-family: var(--mono); font-size: 13px; color: #9FE1CB; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.blink { animation: blink 1s step-end infinite; color: #5DCAA5; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* SECTIONS */
+.section { margin-bottom: 2.25rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; }
+.section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+/* CONTENT CARDS */
+.content-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 1rem;
+}
+.content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
+.content-card p:last-child { margin-bottom: 0; }
+.content-card .about-shot {
+  border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden;
+  margin-bottom: 1rem; background: #000;
+}
+.content-card .about-shot img { width: 100%; display: block; }
+
+/* TAGS */
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.tag { font-family: var(--mono); font-size: 11px; background: var(--bg3); border: 0.5px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; }
+
+/* PDF VIEWER */
+.pdf-frame-wrap {
+  border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+  background: var(--bg3);
+}
+.pdf-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 16px; border-bottom: 0.5px solid var(--border); flex-wrap: wrap;
+}
+.pdf-toolbar-label { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.pdf-toolbar-actions { display: flex; gap: 8px; }
+.pdf-btn {
+  font-family: var(--mono); font-size: 11px; color: var(--green); text-decoration: none;
+  border: 0.5px solid var(--green); border-radius: var(--radius-md); padding: 5px 12px;
+  transition: background 0.15s, color 0.15s;
+}
+.pdf-btn:hover { background: var(--green); color: #fff; }
+.pdf-embed {
+  width: 100%; height: 82vh; min-height: 500px; border: none; display: block;
+  background: #525659;
+}
+.pdf-fallback {
+  padding: 2rem; text-align: center; font-family: var(--mono); font-size: 13px; color: var(--muted);
+}
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .terminal-body { padding: 1.25rem; }
+  .pdf-embed { height: 70vh; }
+}
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">← portfolio</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">digital-certificates-sha256</span>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title">~/projects/digital-certificates-sha256 — bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@cyberportfolio</span>:~$ <span class="cmd">openssl req -x509 -newkey rsa:2048</span></div>
+      <div class="name-block">
+        <div class="name-big">Digital Certificates<br><em>&amp; SHA-256 Flags</em></div>
+        <div class="title-line">RSA Keys · X.509 Certificates · Hash Validation <span class="blink">█</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <div class="about-shot"><img src="img/digicert.jpg" alt="Diagram of the six-step digital certificate process, from generating a private key to importing the certificate into Windows"></div>
+      <div class="about-shot"><img src="img/thumb-sha256.jpg" alt="Diagram showing plain text being run through SHA-256 hashing to produce a hash output"></div>
+      <p>This project demonstrates how to create and manage a digital certificate using OpenSSL on Windows and how to validate files using SHA-256 hashing. It covers generating RSA keys, exporting certificates, importing them into Windows, and verifying the integrity of flag files through cryptographic hashes.</p>
+      <div class="tag-row">
+        <span class="tag">OpenSSL</span><span class="tag">X.509</span><span class="tag">SHA-256</span><span class="tag">PKI</span><span class="tag">RSA</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="section-label">// full walkthrough</span><div class="section-line"></div></div>
+    <div class="pdf-frame-wrap">
+      <div class="pdf-toolbar">
+        <span class="pdf-toolbar-label">// scroll to read</span>
+        <div class="pdf-toolbar-actions">
+          <a class="pdf-btn" href="digital-certificates-sha256.pdf" target="_blank" rel="noopener">// open in new tab</a>
+          <a class="pdf-btn" href="digital-certificates-sha256.pdf" download>// download</a>
+        </div>
+      </div>
+      <iframe class="pdf-embed" src="digital-certificates-sha256.pdf" title="Digital Certificate and SHA-256 Flags PDF">
+        <div class="pdf-fallback">
+          Your browser can't display embedded PDFs.
+          <a href="digital-certificates-sha256.pdf" style="color:var(--green);">Open the PDF directly instead →</a>
+        </div>
+      </iframe>
+    </div>
+  </div>
+
+  <div class="footer">// jordan flaum &nbsp;·&nbsp; <a href="readme.html?doc=README-digital-certificates-sha256.md" style="color:var(--green);text-decoration:none;">// README</a> &nbsp;·&nbsp; <a href="index.html" style="color:var(--green);text-decoration:none;">← back to portfolio</a></div>
+
+</div>
+</body>
+</html>
