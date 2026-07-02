@@ -181,6 +181,15 @@
       grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
       gap: 10px;
     }
+    .skills-card {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem 2rem;
+    }
     .skill-group {
       background: var(--bg2);
       border: 0.5px solid var(--border);
@@ -188,11 +197,105 @@
       padding: 1rem 1rem 1rem 1.25rem;
       position: relative; overflow: hidden;
     }
+    .skills-card .skill-group {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0 0 0 1rem;
+    }
     .skill-group::before {
       content: ''; position: absolute;
       top: 0; left: 0; width: 3px; height: 100%;
       background: var(--green);
     }
+
+    /* Retro CRT stat panel */
+    .crt-panel {
+      position: relative;
+      background: #0a0d0a;
+      border: 1px solid var(--green-dim);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.1rem;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(29,158,117,0.15), inset 0 0 30px rgba(0,0,0,0.6);
+      font-family: var(--mono);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .crt-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 0px,
+        rgba(0,0,0,0) 1px,
+        rgba(0,0,0,0.35) 2px,
+        rgba(0,0,0,0.35) 3px
+      );
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    .crt-panel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(93,202,165,0.06) 0%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+      animation: crt-flicker 4.5s infinite;
+    }
+    @keyframes crt-flicker {
+      0%, 96%, 100% { opacity: 1; }
+      97% { opacity: 0.85; }
+      98% { opacity: 1; }
+      99% { opacity: 0.9; }
+    }
+    .crt-head {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; letter-spacing: 1.5px; color: var(--green-glow);
+      text-shadow: 0 0 6px rgba(93,202,165,0.6);
+      border-bottom: 1px dashed var(--green-dim);
+      padding-bottom: 6px; margin-bottom: 2px;
+    }
+    .crt-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green-glow);
+      box-shadow: 0 0 6px var(--green-glow);
+      display: inline-block; margin-right: 5px;
+      animation: crt-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes crt-pulse { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+    .crt-line {
+      font-size: 12px; color: var(--green-glow);
+      text-shadow: 0 0 4px rgba(93,202,165,0.4);
+      display: flex; justify-content: space-between; gap: 8px;
+    }
+    .crt-label { color: var(--muted); }
+    .crt-bar-row { display: flex; flex-direction: column; gap: 2px; }
+    .crt-bar-label {
+      font-size: 11px; color: var(--muted); letter-spacing: 0.5px;
+      display: flex; justify-content: space-between;
+    }
+    .crt-bar-track {
+      height: 6px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--green-dim); border-radius: 2px;
+      overflow: hidden;
+    }
+    .crt-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-dim), var(--green-glow));
+      box-shadow: 0 0 6px rgba(93,202,165,0.5);
+    }
+    .crt-cursor-line {
+      font-size: 12px; color: var(--green-glow); margin-top: 2px;
+    }
+    .crt-cursor {
+      display: inline-block; width: 7px; height: 12px;
+      background: var(--green-glow);
+      box-shadow: 0 0 6px var(--green-glow);
+      animation: crt-blink 1s steps(1) infinite;
+      vertical-align: middle; margin-left: 2px;
+    }
+    @keyframes crt-blink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
     .skill-group-label {
       font-family: var(--mono); font-size: 12px;
       color: var(--green); text-transform: uppercase;
@@ -636,7 +739,7 @@
       <span class="section-label">// skills</span>
       <div class="section-line"></div>
     </div>
-    <div class="skills-grid">
+    <div class="skills-card">
       <div class="skill-group">
         <div class="skill-group-label">Systems</div>
         <div class="skill-tags">
@@ -655,6 +758,8 @@
           <span class="tag">VPN</span>
           <span class="tag">DNS</span>
           <span class="tag">DHCP</span>
+          <span class="tag">TCP/IP</span>
+          <span class="tag">Wi-Fi Troubleshooting</span>
         </div>
       </div>
       <div class="skill-group">
@@ -663,6 +768,7 @@
           <span class="tag">Azure AD</span>
           <span class="tag">M365 Admin</span>
           <span class="tag">Exchange Online</span>
+          <span class="tag">Conditional Access</span>
         </div>
       </div>
       <div class="skill-group">
@@ -674,6 +780,11 @@
           <span class="tag">EDR</span>
           <span class="tag">Firewalls</span>
           <span class="tag">Policy Creation</span>
+          <span class="tag">Digital Forensics</span>
+          <span class="tag">Wireshark / Packet Analysis</span>
+          <span class="tag">Incident Response</span>
+          <span class="tag">Threat &amp; Phishing Detection</span>
+          <span class="tag">AppLocker / Least Privilege</span>
         </div>
       </div>
       <div class="skill-group">
@@ -683,7 +794,32 @@
           <span class="tag">System Imaging</span>
           <span class="tag">Backup &amp; Recovery</span>
           <span class="tag">User Training</span>
+          <span class="tag">Patch Management</span>
+          <span class="tag">Asset Tracking</span>
         </div>
+      </div>
+
+      <div class="crt-panel">
+        <div class="crt-head">
+          <span><span class="crt-dot"></span>OPERATOR STATUS</span>
+          <span>[ ONLINE ]</span>
+        </div>
+        <div class="crt-line"><span class="crt-label">NAME</span><span>J. FLAUM</span></div>
+        <div class="crt-line"><span class="crt-label">CLASS</span><span>SYSADMIN / SEC</span></div>
+        <div class="crt-line"><span class="crt-label">UPTIME</span><span>2+ YRS</span></div>
+        <div class="crt-bar-row">
+          <div class="crt-bar-label"><span>SECURITY</span><span>90%</span></div>
+          <div class="crt-bar-track"><div class="crt-bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="crt-bar-row">
+          <div class="crt-bar-label"><span>SYSTEMS</span><span>85%</span></div>
+          <div class="crt-bar-track"><div class="crt-bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="crt-bar-row">
+          <div class="crt-bar-label"><span>CLOUD</span><span>80%</span></div>
+          <div class="crt-bar-track"><div class="crt-bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="crt-cursor-line">&gt; awaiting input<span class="crt-cursor"></span></div>
       </div>
     </div>
   </div>
