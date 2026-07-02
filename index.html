@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cybersecurity Portfolio</title>
+  <title>Jordan Flaum — Cybersecurity Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -24,6 +24,8 @@
   --sans: 'Syne', sans-serif;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --gold: #E3B341;
+  --red-suit: #D6394A;
 }
 
     @media (prefers-color-scheme: dark) {
@@ -49,8 +51,35 @@
     .container {
       max-width: 820px;
       margin: 0 auto;
-      padding: 3rem 1.5rem 5rem;
+      padding: 1.5rem 1.5rem 5rem;
     }
+
+    /* ── STICKY NAV ── */
+    .topnav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(20,20,18,0.92);
+      backdrop-filter: blur(8px);
+      margin: 0 -1.5rem 2rem;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .topnav-brand {
+      font-family: var(--mono); font-size: 13px; color: var(--green-glow);
+      white-space: nowrap;
+    }
+    .topnav-links {
+      display: flex; gap: 4px; flex-wrap: wrap;
+      list-style: none;
+    }
+    .topnav-links a {
+      font-family: var(--mono); font-size: 12px; color: var(--muted);
+      text-decoration: none; padding: 6px 11px;
+      border: 0.5px solid transparent; border-radius: var(--radius-md);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .topnav-links a:hover { border-color: var(--green); color: var(--green); }
 
     .header { margin-bottom: 2.5rem; }
 
@@ -125,7 +154,7 @@
       text-transform: uppercase; letter-spacing: 1.2px;
     }
 
-    .section { margin-bottom: 2.25rem; }
+    .section { margin-bottom: 2.25rem; scroll-margin-top: 80px; }
 
     .section-header {
       display: flex; align-items: center; gap: 10px;
@@ -178,6 +207,7 @@
       padding: 4px 10px; border-radius: 4px;
     }
 
+    .exp-list { display: flex; flex-direction: column; gap: 14px; }
     .exp-card {
       background: var(--bg2);
       border: 0.5px solid var(--border);
@@ -246,6 +276,177 @@
       color: var(--green); margin-top: 5px;
     }
 
+    /* ── HOME LAB FEATURE CARD ── */
+    .home-lab-feature {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .home-lab-feature-top {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 8px;
+    }
+    .home-lab-feature-name { font-size: 19px; font-weight: 700; color: var(--text); }
+    .home-lab-feature-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 1.1rem; }
+    .home-lab-subgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px; margin-bottom: 1.1rem;
+    }
+    .home-lab-sub-card {
+      background: var(--bg3); border: 0.5px solid var(--border);
+      border-radius: var(--radius-md); overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .home-lab-sub-card a.thumb-link { display: block; }
+    .home-lab-sub-card img {
+      width: 100%; height: 140px; object-fit: cover; display: block;
+      border-bottom: 0.5px solid var(--border);
+      transition: opacity 0.15s;
+    }
+    .home-lab-sub-card a.thumb-link:hover img { opacity: 0.85; }
+    .home-lab-sub-body { padding: 0.9rem 1rem 1rem; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .home-lab-sub-num { font-family: var(--mono); font-size: 10px; color: var(--green); letter-spacing: 1px; }
+    .home-lab-sub-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .home-lab-sub-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .home-lab-sub-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .home-lab-sub-links a {
+      font-family: var(--mono); font-size: 13px; color: var(--green); text-decoration: none;
+      border: 0.5px solid var(--green); border-radius: var(--radius-md);
+      padding: 7px 16px; transition: background 0.15s, color 0.15s;
+    }
+    .home-lab-sub-links a:hover { background: var(--green); color: #fff; }
+
+    /* ── EMBEDDED CASINO GAME ── */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.82; }
+      94% { opacity: 1; }
+      96% { opacity: 0.88; }
+      97% { opacity: 1; }
+    }
+    @keyframes scanmove {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+    @keyframes phosphorPulse {
+      0%, 100% { text-shadow: 0 0 6px rgba(93,202,165,0.55), 0 0 14px rgba(93,202,165,0.25); }
+      50% { text-shadow: 0 0 9px rgba(93,202,165,0.8), 0 0 20px rgba(93,202,165,0.4); }
+    }
+    .felt {
+      background: radial-gradient(ellipse at top, #0a4a3c 0%, #04342C 70%);
+      border: 1px solid #0F6E56; border-radius: var(--radius-lg);
+      padding: 1.75rem 1.5rem; position: relative; overflow: hidden;
+      margin-top: 1.1rem;
+    }
+    .felt::before {
+      content: '♠ ♥ ♦ ♣'; position: absolute; top: 10px; right: 18px;
+      font-size: 13px; letter-spacing: 6px; color: rgba(225,245,238,0.15);
+      font-family: var(--sans); font-weight: 800;
+    }
+    .felt.crt { box-shadow: inset 0 0 120px rgba(0,0,0,0.65), inset 0 0 40px rgba(0,0,0,0.5), 0 0 0 1px #0F6E56; animation: flicker 6s infinite; }
+    .felt.crt::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: var(--radius-lg);
+      background: repeating-linear-gradient(to bottom, rgba(225,245,238,0.05) 0px, rgba(225,245,238,0.05) 1px, transparent 1px, transparent 3px);
+      mix-blend-mode: overlay; animation: scanmove 6s linear infinite;
+    }
+    .felt.crt .table-title, .felt.crt .area-label span:first-child { animation: phosphorPulse 3.2s ease-in-out infinite; }
+    .table-title { font-family: var(--mono); font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; text-align: center; margin-bottom: 1.5rem; }
+    .area { margin-bottom: 1.6rem; }
+    .area-label { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: #9FE1CB; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+    .score-pill { font-family: var(--mono); font-size: 13px; color: #04342C; background: #E1F5EE; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+    .card-row { display: flex; gap: 8px; min-height: 96px; flex-wrap: wrap; align-items: flex-start; }
+    .playing-card {
+      width: 58px; height: 84px; background: #fdfcf9; border-radius: 6px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 6px; font-family: var(--sans); font-weight: 800;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.45);
+      animation: dealIn 0.25s ease-out;
+    }
+    @keyframes dealIn { from { opacity: 0; transform: translateY(-10px) rotate(-4deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+    .playing-card.red { color: var(--red-suit); }
+    .playing-card.black { color: #1a1a18; }
+    .playing-card .rank-top { font-size: 13px; line-height: 1; }
+    .playing-card .suit-center { font-size: 20px; align-self: center; line-height: 1; }
+    .playing-card .rank-bottom { font-size: 13px; align-self: flex-end; transform: rotate(180deg); line-height: 1; }
+    .game-result { font-family: var(--mono); font-size: 15px; color: var(--gold); text-align: center; min-height: 22px; margin: 0.25rem 0 1rem; }
+    .game-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .game-btn {
+      font-family: var(--mono); font-size: 13px; background: transparent;
+      border: 0.5px solid var(--green-glow); color: var(--green-glow);
+      padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .game-btn:hover:not(:disabled) { background: var(--green-glow); color: #04342C; }
+    .game-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .game-btn.primary { border-color: var(--gold); color: var(--gold); }
+    .game-btn.primary:hover:not(:disabled) { background: var(--gold); color: #04342C; }
+    .game-stats {
+      font-family: var(--mono); font-size: 11px; color: #9FE1CB; display: flex; gap: 16px;
+      flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; padding-top: 1.1rem;
+      border-top: 0.5px solid rgba(225,245,238,0.15);
+    }
+    .game-stats span b { color: var(--gold); }
+    .house-line { font-family: var(--mono); font-size: 10px; color: rgba(225,245,238,0.4); text-align: center; margin-top: 10px; letter-spacing: 1px; }
+
+    /* ── PIP-BOY MONITOR ── */
+    .pipboy-monitor {
+      background: #0d0d0c; border: 6px solid #2a2a28; border-radius: 26px;
+      padding: 20px; box-shadow: 0 14px 34px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .pipboy-screen {
+      background: #02120C; border-radius: 14px; padding: 18px 18px 14px;
+      position: relative; overflow: hidden; box-shadow: inset 0 0 70px rgba(0,0,0,0.85);
+    }
+    .pipboy-screen.crt { animation: flicker 6s infinite; }
+    .pipboy-screen.crt::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(225,245,238,0.05) 0px, rgba(225,245,238,0.05) 1px, transparent 1px, transparent 3px);
+      mix-blend-mode: overlay; animation: scanmove 6s linear infinite;
+    }
+    .pipboy-screen::before {
+      content: ''; position: absolute; top: -40%; right: -25%; width: 70%; height: 120%;
+      background: radial-gradient(circle, rgba(120,255,190,0.13), transparent 60%); pointer-events: none;
+    }
+    .pb-header { font-family: var(--mono); font-size: 12px; color: #6FE3B0; text-transform: uppercase; letter-spacing: 1px; line-height: 1.7; }
+    .pb-attempts { font-family: var(--mono); font-size: 12px; color: #9FE1CB; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; margin: 10px 0 14px; }
+    .pips { display: inline-flex; gap: 5px; }
+    .pip { width: 9px; height: 9px; background: #6FE3B0; box-shadow: 0 0 5px rgba(111,227,176,0.8); }
+    .pip.empty { background: rgba(111,227,176,0.15); box-shadow: none; }
+
+    .pipboy-body { display: flex; flex-wrap: wrap; gap: 18px; }
+    .pipboy-col { flex: 1 1 220px; min-width: 190px; }
+    .term-row { display: flex; gap: 8px; white-space: nowrap; }
+    .term-addr { font-family: var(--mono); font-size: 10.5px; color: rgba(111,227,176,0.45); line-height: 1.85; }
+    .term-chars { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.5px; line-height: 1.85; }
+    .tc { padding: 0 1px; border-radius: 2px; cursor: default; color: rgba(159,225,203,0.85); }
+    .tc.junk { cursor: pointer; }
+    .tc.junk:hover, .tc.junk.hl { background: rgba(93,202,165,0.18); color: #d9ffe9; }
+    .tc.word { cursor: pointer; color: #eafff2; font-weight: 700; }
+    .tc.word:hover:not(.disabled), .tc.word.hl:not(.disabled) { background: rgba(93,202,165,0.4); }
+    .tc.word.disabled { opacity: 0.32; cursor: default; }
+    .tc.word.disabled.dud { text-decoration: line-through; }
+    .tc.word.correct { color: #8fffc0; background: rgba(143,255,192,0.2); text-shadow: 0 0 6px rgba(143,255,192,0.8); }
+    .tc.bracket { cursor: pointer; color: #ffe27a; font-weight: 700; }
+    .tc.bracket:hover, .tc.bracket.hl { background: rgba(255,226,122,0.35); }
+    .tc.bracket.used { opacity: 0.25; cursor: default; }
+
+    .pipboy-feed {
+      flex: 1 1 220px; min-width: 190px; max-height: 340px; overflow-y: auto;
+      border-left: 1px dashed rgba(111,227,176,0.25); padding-left: 14px;
+      font-family: var(--mono); font-size: 12px; line-height: 1.85;
+    }
+    .pipboy-feed div.f-info { color: #9FE1CB; }
+    .pipboy-feed div.f-good { color: #8fffc0; }
+    .pipboy-feed div.f-bad { color: #ff9a8a; }
+    .pipboy-feed::-webkit-scrollbar { width: 6px; }
+    .pipboy-feed::-webkit-scrollbar-thumb { background: rgba(111,227,176,0.3); border-radius: 3px; }
+
     /* ── PROJECT CARDS ── */
     .projects-grid {
       display: grid;
@@ -259,6 +460,15 @@
       padding: 1.25rem;
       display: flex; flex-direction: column; gap: 8px;
     }
+    .project-card .card-thumb {
+      display: block; margin: -1.25rem -1.25rem 0.4rem;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow: hidden;
+    }
+    .project-card .card-thumb img {
+      width: 100%; height: 140px; object-fit: cover; display: block;
+      border-bottom: 0.5px solid var(--border); transition: opacity 0.15s;
+    }
+    .project-card .card-thumb:hover img { opacity: 0.85; }
     .project-top { display: flex; align-items: center; justify-content: space-between; }
     .project-name { font-size: 17px; font-weight: 700; color: var(--text); }
     .project-type {
@@ -306,7 +516,8 @@
     }
 
     @media (max-width: 480px) {
-      .container { padding: 1.5rem 1rem 4rem; }
+      .container { padding: 1rem 1rem 4rem; }
+      .topnav { margin: 0 -1rem 2rem; padding: 0.75rem 1rem; }
       .stat-row { grid-template-columns: 1fr 1fr; }
       .stat-row .stat-card:last-child { grid-column: span 2; }
       .terminal-body { padding: 1.25rem; }
@@ -315,6 +526,18 @@
 </head>
 <body>
 <div class="container">
+
+  <nav class="topnav">
+    <span class="topnav-brand">jordan@flaum:~$</span>
+    <ul class="topnav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
 
   <div class="header">
     <div class="terminal-bar">
@@ -335,6 +558,18 @@
     </div>
   </div>
 
+  <!-- CONTACT -->
+  <div class="section" id="contact">
+    <div class="section-header">
+      <span class="section-label">// contact</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-row">
+      <a class="contact-btn" href="mailto:jflaum.it@gmail.com">📧 jflaum.it@gmail.com</a>
+      <a class="contact-btn" href="https://www.linkedin.com/in/jordan-flaum-2b0196a7/" target="_blank">💼 LinkedIn</a>
+    </div>
+  </div>
+
   <div class="stat-row">
     <div class="stat-card">
       <div class="stat-num">2+</div>
@@ -350,20 +585,21 @@
     </div>
   </div>
 
-  <!-- CONTACT -->
-  <div class="section">
+  <!-- ABOUT -->
+  <div class="section" id="about">
     <div class="section-header">
-      <span class="section-label">// contact</span>
+      <span class="section-label">// about</span>
       <div class="section-line"></div>
     </div>
-    <div class="contact-row">
-      <a class="contact-btn" href="mailto:jflaum.it@gmail.com">📧 jflaum.it@gmail.com</a>
-      <a class="contact-btn" href="https://www.linkedin.com/in/jordan-flaum-2b0196a7/" target="_blank">💼 LinkedIn</a>
+    <div class="about-card">
+      <p class="about-text">
+        Cybersecurity and digital forensics graduate with nearly 3 years of hands on IT management experience at a law firm. Proven track record securing sensitive legal environments, hardening infrastructure, leading vulnerability assessments, and building security aware teams. Skilled across the full stack of enterprise IT: from Active Directory and Azure AD to EDR tooling and incident response policy.
+      </p>
     </div>
   </div>
 
   <!-- EDUCATION & CERTS -->
-  <div class="section">
+  <div class="section" id="education">
     <div class="section-header">
       <span class="section-label">// education &amp; certifications</span>
       <div class="section-line"></div>
@@ -394,21 +630,8 @@
     </div>
   </div>
 
-  <!-- ABOUT -->
-  <div class="section">
-    <div class="section-header">
-      <span class="section-label">// about</span>
-      <div class="section-line"></div>
-    </div>
-    <div class="about-card">
-      <p class="about-text">
-        Cybersecurity and digital forensics graduate with nearly 3 years of hands on IT management experience at a law firm. Proven track record securing sensitive legal environments, hardening infrastructure, leading vulnerability assessments, and building security aware teams. Skilled across the full stack of enterprise IT: from Active Directory and Azure AD to EDR tooling and incident response policy.
-      </p>
-    </div>
-  </div>
-
   <!-- SKILLS -->
-  <div class="section">
+  <div class="section" id="skills">
     <div class="section-header">
       <span class="section-label">// skills</span>
       <div class="section-line"></div>
@@ -421,8 +644,7 @@
           <span class="tag">Windows 10/11</span>
           <span class="tag">Ubuntu</span>
           <span class="tag">Kali Linux</span>
-          <span class="tag">Active Directory</span>span>
-          
+          <span class="tag">Active Directory</span>
         </div>
       </div>
       <div class="skill-group">
@@ -467,16 +689,17 @@
   </div>
 
   <!-- EXPERIENCE -->
-  <div class="section">
+  <div class="section" id="experience">
     <div class="section-header">
       <span class="section-label">// experience</span>
       <div class="section-line"></div>
     </div>
+    <div class="exp-list">
     <div class="exp-card">
       <div class="exp-header">
         <div>
           <div class="exp-role">IT Manager</div>
-          <div class="exp-company">Law Firm — Legal Sector</div>
+          <div class="exp-company">American Litigation Law Group</div>
         </div>
         <div class="exp-badge">Present</div>
       </div>
@@ -488,34 +711,170 @@
         <li>Designed and delivered user security awareness training programmes, improving threat recognition across the organisation</li>
       </ul>
     </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">IT Coordinator</div>
+          <div class="exp-company">American Litigation Law Group</div>
+        </div>
+        <div class="exp-badge">Previous</div>
+      </div>
+      <ul class="exp-items">
+        <li>Sole IT administrator for the firm, delivering Tier 1–3 support to 25+ users across hardware, software, network, and Microsoft 365</li>
+        <li>Managed full user lifecycle — account provisioning, workstation setup, onboarding, and IT training</li>
+        <li>Administered Microsoft 365 (Exchange Online, Entra ID, Security) and optimized network file shares with backup solutions</li>
+        <li>Designed a SharePoint-based document archiving system and led cybersecurity awareness initiatives, including simulated phishing campaigns</li>
+        <li>Managed email marketing and social media campaigns supporting business development</li>
+      </ul>
+    </div>
+    </div>
   </div>
 
   <!-- PROJECTS -->
-  <div class="section">
+  <div class="section" id="projects">
     <div class="section-header">
-      <span class="section-label">// projects</span>
+      <span class="section-label">// home lab</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="home-lab-feature">
+      <div class="home-lab-feature-top">
+        <div class="home-lab-feature-name">Home Labs</div>
+      </div>
+      <p class="home-lab-feature-desc">A self-contained lab environment built in VirtualBox to practice real-world Windows domain administration and offensive/defensive security work — covering domain setup, security hardening, and vulnerability assessment.</p>
+
+      <div class="home-lab-subgrid">
+
+        <div class="home-lab-sub-card">
+          <a href="home-lab-active-directory.html" class="thumb-link"><img src="img/thumb-ad.png" alt="Active Directory domain controller setup"></a>
+          <div class="home-lab-sub-body">
+            <span class="home-lab-sub-num">01 — 03</span>
+            <div class="home-lab-sub-title">Windows 2025 Domain Controller + Client Join</div>
+            <p class="home-lab-sub-desc">Building a Windows Server 2025 domain controller from scratch and joining a Windows 11 client to the domain.</p>
+            <div class="home-lab-sub-links">
+              <a href="home-lab-active-directory.html">// view lab →</a>
+              <a href="readme.html?doc=README-active-directory.md">// README</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-lab-sub-card">
+          <a href="home-lab-group-policy-security.html" class="thumb-link"><img src="img/thumb-gpo.png" alt="Group Policy and security hardening setup"></a>
+          <div class="home-lab-sub-body">
+            <span class="home-lab-sub-num">04</span>
+            <div class="home-lab-sub-title">Group Policy &amp; Security Hardening</div>
+            <p class="home-lab-sub-desc">OU/group structure built around least privilege, enforced with GPOs — password policy, Defender, AppLocker, audit logging.</p>
+            <div class="home-lab-sub-links">
+              <a href="home-lab-group-policy-security.html">// view lab →</a>
+              <a href="readme.html?doc=README-group-policy-security.md">// README</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-lab-sub-card">
+          <a href="home-lab-kali-nessus.html" class="thumb-link"><img src="img/thumb-kali.png" alt="Nessus vulnerability scan via Kali Linux"></a>
+          <div class="home-lab-sub-body">
+            <span class="home-lab-sub-num">05 — 06</span>
+            <div class="home-lab-sub-title">Vulnerability Assessment Using Nessus Via Kali Linux</div>
+            <p class="home-lab-sub-desc">Standing up Kali Linux as the attacker-perspective box, then using Nessus to scan the domain.</p>
+            <div class="home-lab-sub-links">
+              <a href="home-lab-kali-nessus.html">// view lab →</a>
+              <a href="readme.html?doc=README-kali-nessus.md">// README</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-label">// games</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="home-lab-feature">
+      <div class="home-lab-feature-top">
+        <div class="home-lab-feature-name">The House Always Wins — Lucky 38 Blackjack</div>
+      </div>
+      <p class="home-lab-feature-desc">A Blackjack game built in Python/Tkinter, themed after the Lucky 38 Casino from Fallout: New Vegas — full deck logic, Ace-aware scoring, and an automatic dealer. Play the browser version right here.</p>
+
+      <div class="felt crt">
+        <div class="table-title">Lucky 38 Casino Presents Blackjack</div>
+
+        <div class="area">
+          <div class="area-label"><span>Dealer</span><span class="score-pill" id="dealerScore">0</span></div>
+          <div class="card-row" id="dealerRow"></div>
+        </div>
+
+        <div class="area">
+          <div class="area-label"><span>Player</span><span class="score-pill" id="playerScore">0</span></div>
+          <div class="card-row" id="playerRow"></div>
+        </div>
+
+        <div class="game-result" id="gameResult"></div>
+
+        <div class="game-controls">
+          <button class="game-btn" id="btnHit">Hit</button>
+          <button class="game-btn" id="btnStand">Stand</button>
+          <button class="game-btn primary" id="btnNewGame">New Game</button>
+        </div>
+
+        <div class="game-stats">
+          <span>Played: <b id="statPlayed">0</b></span>
+          <span>Won: <b id="statWon">0</b></span>
+          <span>Lost: <b id="statLost">0</b></span>
+          <span>21s: <b id="statBJ">0</b></span>
+        </div>
+        <div class="house-line">// no real money involved — the house edge is purely mathematical here</div>
+      </div>
+
+      <a href="blackjack-lucky38.html" class="project-link" style="margin-top:1.1rem;">// full walkthrough &amp; code →</a>
+    </div>
+
+    <div class="home-lab-feature">
+      <div class="home-lab-feature-top">
+        <div class="home-lab-feature-name">RobCo Termlink — Fallout Terminal Hacking</div>
+      </div>
+      <p class="home-lab-feature-desc">A fully playable Fallout terminal hacking minigame — replicating the classic mechanics from Fallout 3, 4, and New Vegas. Click a highlighted word to guess it, using a Likeness score to narrow it down. Hidden in the junk are matching bracket pairs — click either symbol of an intact pair to remove a dud or reset your attempts.</p>
+
+      <div class="pipboy-monitor">
+        <div class="pipboy-screen crt">
+          <div class="pb-header">
+            <div>ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>
+            <div>ENTER PASSWORD NOW</div>
+          </div>
+          <div class="pb-attempts">
+            <span id="rcAttemptsLabel">4 ATTEMPT(S) LEFT:</span>
+            <span class="pips" id="rcPips"></span>
+          </div>
+          <div class="pipboy-body" id="rcDump"></div>
+          <div class="pipboy-feed" id="rcFeed"></div>
+        </div>
+      </div>
+
+      <div class="game-controls" style="margin-top:1.1rem;">
+        <button class="game-btn primary" id="rcNewGame">New Game</button>
+      </div>
+      <div class="game-stats">
+        <span>Played: <b id="rcStatPlayed">0</b></span>
+        <span>Won: <b id="rcStatWon">0</b></span>
+        <span>Lost: <b id="rcStatLost">0</b></span>
+      </div>
+      <div class="house-line">// click a word to guess it · click a bracket pair to remove a dud or reset your attempts · every character on screen is selectable</div>
+
+      <a href="fallout-terminal-hacking.html" class="project-link" style="margin-top:1.1rem;">// full walkthrough &amp; code →</a>
+    </div>
+
+    <div class="section-header">
+      <span class="section-label">// educational projects</span>
       <div class="section-line"></div>
     </div>
     <div class="projects-grid">
 
-    <!-- Home Labs -->
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-name">Home Labs</div>
-        </div>
-        <p class="project-desc">Self-contained Active Directory environment built in VirtualBox — domain controller setup, Group Policy &amp; security hardening, and a Kali Linux vulnerability assessment with Nessus.</p>
-        <div class="project-stack">
-          <span class="tag">Windows Server 2025</span>
-          <span class="tag">Active Directory</span>
-          <span class="tag">Group Policy</span>
-          <span class="tag">Kali Linux</span>
-          <span class="tag">Nessus</span>
-        </div>
-        <a href="home-lab.html" class="project-link">// view page →</a>
-      </div>
-
       <!-- Penetration Testing Report -->
       <div class="project-card">
+        <a href="penetration-testing-report.html" class="card-thumb"><img src="img/thumb-pentest.jpg" alt="USB rubber ducky drive used in the penetration test"></a>
         <div class="project-top">
           <div class="project-name">Penetration Testing Report</div>
         </div>
@@ -526,11 +885,15 @@
           <span class="tag">SQL Injection</span>
           <span class="tag">Network Security</span>
         </div>
-        <a href="penetration-testing-report.html" class="project-link">// view page →</a>
+        <div class="home-lab-sub-links" style="margin-top:2px;">
+          <a href="penetration-testing-report.html">// view page →</a>
+          <a href="readme.html?doc=README-penetration-testing-report.md">// README</a>
+        </div>
       </div>
 
       <!-- Wireshark Labs -->
       <div class="project-card">
+        <a href="wireshark-labs.html" class="card-thumb"><img src="img/thumb-wireshark.jpg" alt="Green hexadecimal-style packet data on screen"></a>
         <div class="project-top">
           <div class="project-name">Wireshark Labs</div>
         </div>
@@ -541,11 +904,15 @@
           <span class="tag">TCP/IP</span>
           <span class="tag">Network Forensics</span>
         </div>
-        <a href="wireshark-labs.html" class="project-link">// view page →</a>
+        <div class="home-lab-sub-links" style="margin-top:2px;">
+          <a href="wireshark-labs.html">// view page →</a>
+          <a href="readme.html?doc=README-wireshark-labs.md">// README</a>
+        </div>
       </div>
 
       <!-- Diffie-Hellman -->
       <div class="project-card">
+        <a href="diffie-hellman-key-agreement.html" class="card-thumb"><img src="img/thumb-diffie-hellman.jpg" alt="Diagram illustrating the Diffie-Hellman key exchange process"></a>
         <div class="project-top">
           <div class="project-name">Diffie-Hellman Key Agreement</div>
         </div>
@@ -555,11 +922,15 @@
           <span class="tag">Cryptography</span>
           <span class="tag">Key Exchange</span>
         </div>
-        <a href="diffie-hellman-key-agreement.html" class="project-link">// view page →</a>
+        <div class="home-lab-sub-links" style="margin-top:2px;">
+          <a href="diffie-hellman-key-agreement.html">// view page →</a>
+          <a href="readme.html?doc=README-diffie-hellman-key-agreement.md">// README</a>
+        </div>
       </div>
 
       <!-- Digital Certificates & SHA-256 -->
       <div class="project-card">
+        <a href="digital-certificates-sha256.html" class="card-thumb"><img src="img/thumb-sha256.jpg" alt="Diagram showing plain text hashed with SHA-256 into a hash output"></a>
         <div class="project-top">
           <div class="project-name">Digital Certificates &amp; SHA-256</div>
         </div>
@@ -570,52 +941,30 @@
           <span class="tag">SHA-256</span>
           <span class="tag">PKI</span>
         </div>
-        <a href="digital-certificates-sha256.html" class="project-link">// view page →</a>
+        <div class="home-lab-sub-links" style="margin-top:2px;">
+          <a href="digital-certificates-sha256.html">// view page →</a>
+          <a href="readme.html?doc=README-digital-certificates-sha256.md">// README</a>
+        </div>
       </div>
 
-      <!-- Blackjack Lucky 38 -->
+      <!-- Digital Forensics - Magnet AXIOM Project -->
       <div class="project-card">
+        <a href="digital-forensics-magnet-axiom.html" class="card-thumb"><img src="img/thumb-digital-forensics.jpg" alt="Victims and subjects table from a homicide investigation showing the victim and two suspects"></a>
         <div class="project-top">
-          <div class="project-name">Blackjack Lucky 38 Casino</div>
+          <div class="project-name">Digital Forensics — Magnet AXIOM Project</div>
         </div>
-        <p class="project-desc">Command-line Blackjack game themed after the Lucky 38 Casino from Fallout: New Vegas — featuring full deck logic, Ace handling, and dealer AI following standard casino rules.</p>
-        <div class="project-stack">
-          <span class="tag">Python</span>
-          <span class="tag">Game Logic</span>
-          <span class="tag">CLI</span>
-          <span class="tag">State Management</span>
-        </div>
-        <a href="blackjack-lucky38.html" class="project-link">// view page →</a>
-      </div>
-
-      <!-- Major Crimes Case Analysis -->
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-name">Major Crimes Case Analysis</div>
-        </div>
-        <p class="project-desc">Forensic examination of a major crimes case involving drug trafficking and weapons charges. Documented full investigative methodology across Windows laptops, SD cards, iCloud, Facebook, and Instagram across five suspects.</p>
+        <p class="project-desc">Forensic examination using Magnet AXIOM to analyze a computer involved in a criminal case — examining browser history, emails, downloads, user accounts, passwords, media files, and cloud artifacts to answer investigative questions and document findings in a forensic report.</p>
         <div class="project-stack">
           <span class="tag">Magnet AXIOM</span>
           <span class="tag">Browser Forensics</span>
           <span class="tag">Email Analysis</span>
           <span class="tag">Cloud Forensics</span>
-        </div>
-        <a href="major-crimes-case-analysis.html" class="project-link">// view page →</a>
-      </div>
-
-      <!-- Robbery & Conspiracy Investigation -->
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-name">Robbery &amp; Conspiracy Investigation</div>
-        </div>
-        <p class="project-desc">Multi-source digital forensics investigation across 10 evidence items and three suspects — correlating browser artifacts, emails, GPS data, and hash-matched photos to build a timeline and establish connections.</p>
-        <div class="project-stack">
-          <span class="tag">Magnet AXIOM</span>
-          <span class="tag">Artifact Analysis</span>
           <span class="tag">Mobile Forensics</span>
-          <span class="tag">OSINT</span>
         </div>
-        <a href="robbery-conspiracy-investigation.html" class="project-link">// view page →</a>
+        <div class="home-lab-sub-links" style="margin-top:2px;">
+          <a href="digital-forensics-magnet-axiom.html">// view page →</a>
+          <a href="readme.html?doc=README-digital-forensics-magnet-axiom.md">// README</a>
+        </div>
       </div>
 
     </div>
@@ -626,4 +975,450 @@
   </div>
 
 </div>
+
+<script>
+(function(){
+  const SUITS = [
+    { key: 'heart', symbol: '♥', color: 'red' },
+    { key: 'diamond', symbol: '♦', color: 'red' },
+    { key: 'club', symbol: '♣', color: 'black' },
+    { key: 'spade', symbol: '♠', color: 'black' }
+  ];
+
+  let deck = [];
+  let playerHand = [];
+  let dealerHand = [];
+  let roundOver = true;
+  let stats = { played: 0, won: 0, lost: 0, blackjacks: 0 };
+
+  function buildDeck(){
+    const d = [];
+    SUITS.forEach(function(suit){
+      for (let r = 1; r <= 10; r++){
+        d.push({ value: r, label: r === 1 ? 'A' : String(r), suit: suit });
+      }
+      ['J','Q','K'].forEach(function(label){
+        d.push({ value: 10, label: label, suit: suit });
+      });
+    });
+    return d;
+  }
+
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function dealCard(hand){
+    if (deck.length === 0){ deck = shuffle(buildDeck()); }
+    hand.push(deck.pop());
+  }
+
+  function scoreHand(hand){
+    let score = 0, ace = false;
+    hand.forEach(function(c){
+      let v = c.value;
+      if (v === 1 && !ace){ ace = true; v = 11; }
+      score += v;
+      if (score > 21 && ace){ score -= 10; ace = false; }
+    });
+    return score;
+  }
+
+  function cardHTML(c){
+    return '<div class="playing-card ' + c.suit.color + '">' +
+      '<span class="rank-top">' + c.label + '</span>' +
+      '<span class="suit-center">' + c.suit.symbol + '</span>' +
+      '<span class="rank-bottom">' + c.label + '</span>' +
+      '</div>';
+  }
+
+  const dealerRow = document.getElementById('dealerRow');
+  const playerRow = document.getElementById('playerRow');
+  const dealerScoreEl = document.getElementById('dealerScore');
+  const playerScoreEl = document.getElementById('playerScore');
+  const resultEl = document.getElementById('gameResult');
+  const btnHit = document.getElementById('btnHit');
+  const btnStand = document.getElementById('btnStand');
+  const btnNewGame = document.getElementById('btnNewGame');
+
+  if (!dealerRow || !playerRow || !btnHit || !btnStand || !btnNewGame) return;
+
+  function render(){
+    dealerRow.innerHTML = dealerHand.map(cardHTML).join('');
+    playerRow.innerHTML = playerHand.map(cardHTML).join('');
+    dealerScoreEl.textContent = scoreHand(dealerHand);
+    playerScoreEl.textContent = scoreHand(playerHand);
+  }
+
+  function renderStats(){
+    document.getElementById('statPlayed').textContent = stats.played;
+    document.getElementById('statWon').textContent = stats.won;
+    document.getElementById('statLost').textContent = stats.lost;
+    document.getElementById('statBJ').textContent = stats.blackjacks;
+  }
+
+  function setControls(enabled){
+    btnHit.disabled = !enabled;
+    btnStand.disabled = !enabled;
+  }
+
+  function endRound(outcome){
+    roundOver = true;
+    stats.played++;
+    if (outcome === 'player'){
+      stats.won++;
+      resultEl.textContent = 'Player wins!';
+    } else if (outcome === 'dealer'){
+      stats.lost++;
+      resultEl.textContent = 'Dealer wins!';
+    } else {
+      resultEl.textContent = "Draw!";
+    }
+    if (scoreHand(playerHand) === 21){ stats.blackjacks++; }
+    renderStats();
+    setControls(false);
+  }
+
+  function hit(){
+    if (roundOver) return;
+    dealCard(playerHand);
+    render();
+    if (scoreHand(playerHand) > 21){
+      endRound('dealer');
+    }
+  }
+
+  function stand(){
+    if (roundOver) return;
+    let dScore = scoreHand(dealerHand);
+    while (dScore > 0 && dScore < 17){
+      dealCard(dealerHand);
+      dScore = scoreHand(dealerHand);
+    }
+    render();
+    const pScore = scoreHand(playerHand);
+    let outcome;
+    if (pScore > 21){ outcome = 'dealer'; }
+    else if (dScore > 21 || dScore < pScore){ outcome = 'player'; }
+    else if (dScore > pScore){ outcome = 'dealer'; }
+    else { outcome = 'push'; }
+    endRound(outcome);
+  }
+
+  function newGame(){
+    deck = shuffle(buildDeck());
+    playerHand = [];
+    dealerHand = [];
+    roundOver = false;
+    resultEl.textContent = '';
+    dealCard(playerHand);
+    dealCard(dealerHand);
+    dealCard(playerHand);
+    render();
+    setControls(true);
+    if (scoreHand(playerHand) === 21){
+      endRound('player');
+    }
+  }
+
+  btnHit.addEventListener('click', hit);
+  btnStand.addEventListener('click', stand);
+  btnNewGame.addEventListener('click', newGame);
+
+  renderStats();
+  newGame();
+})();
+
+(function(){
+  const WORD_POOL = [
+    "REACTOR", "NUCLEAR", "STATION", "WARFARE", "FALLOUT",
+    "SHELTER", "MUTANTS", "ROBOTIC", "BUNKERX", "CAPITAL",
+    "REMANTS", "CRIMSON", "FACTION", "SURVIVE", "URANIUM"
+  ];
+  const ATTEMPTS_ALLOWED = 4;
+  const ROWLEN = 12;
+  const ROWS = 12;
+  const NUM_PAIRS = 6;
+  const PAIR_TYPES = [['<','>'], ['(',')'], ['[',']'], ['{','}']];
+  const JUNK_POOL = (function(){
+    const symbols = "!@#$%^&*-_=+;:,.?/\\|~`'\"".split('');
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const digits = "0123456789".split('');
+    return symbols.concat(symbols, letters, digits);
+  })();
+
+  const dumpEl = document.getElementById('rcDump');
+  const feedEl = document.getElementById('rcFeed');
+  const pipsEl = document.getElementById('rcPips');
+  const attemptsLabelEl = document.getElementById('rcAttemptsLabel');
+  const newGameBtn = document.getElementById('rcNewGame');
+  const statPlayed = document.getElementById('rcStatPlayed');
+  const statWon = document.getElementById('rcStatWon');
+  const statLost = document.getElementById('rcStatLost');
+
+  if (!dumpEl || !feedEl || !pipsEl || !newGameBtn) return;
+
+  let words = [];
+  let secretIdx = 0;
+  let wordStates = [];
+  let pairUsed = {};
+  let attemptsLeft = ATTEMPTS_ALLOWED;
+  let roundOver = true;
+  let colArrays = [[], []];
+  let baseAddr = 0xF400;
+  let stats = { played: 0, won: 0, lost: 0 };
+
+  function sampleWords(arr, n){
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+    }
+    return copy.slice(0, n);
+  }
+
+  function likeness(a, b){
+    let n = 0;
+    for (let i = 0; i < a.length; i++){ if (a[i] === b[i]) n++; }
+    return n;
+  }
+
+  function escapeHtml(ch){
+    if (ch === '<') return '&lt;';
+    if (ch === '>') return '&gt;';
+    if (ch === '&') return '&amp;';
+    if (ch === '"') return '&quot;';
+    if (ch === "'") return '&#39;';
+    return ch;
+  }
+
+  function buildDump(wordList){
+    const total = ROWS * ROWLEN;
+    const cols = [new Array(total).fill(null), new Array(total).fill(null)];
+
+    wordList.forEach(function(word, wi){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = tries < 150 ? (wi % 2) : Math.floor(Math.random() * 2);
+        const row = Math.floor(Math.random() * ROWS);
+        const maxStart = ROWLEN - word.length;
+        if (maxStart < 0) break;
+        const startInRow = Math.floor(Math.random() * (maxStart + 1));
+        const start = row * ROWLEN + startInRow;
+        let ok = true;
+        for (let i = 0; i < word.length; i++){
+          if (cols[c][start + i] !== null){ ok = false; break; }
+        }
+        if (ok){
+          for (let i = 0; i < word.length; i++){
+            cols[c][start + i] = { ch: word[i], type: 'word', groupId: 'w' + wi, wordIndex: wi };
+          }
+          placed = true;
+        }
+      }
+    });
+
+    for (let p = 0; p < NUM_PAIRS; p++){
+      let placed = false, tries = 0;
+      while (!placed && tries < 300){
+        tries++;
+        const c = p % 2 === 0 ? 0 : 1;
+        const type = PAIR_TYPES[Math.floor(Math.random() * PAIR_TYPES.length)];
+        const gap = 2 + Math.floor(Math.random() * 8);
+        const openIdx = Math.floor(Math.random() * (total - gap - 2));
+        const closeIdx = openIdx + gap + 1;
+        if (closeIdx >= total) continue;
+        if (cols[c][openIdx] !== null || cols[c][closeIdx] !== null) continue;
+        cols[c][openIdx] = { ch: type[0], type: 'bracket', groupId: 'p' + p, pairRole: 'open' };
+        cols[c][closeIdx] = { ch: type[1], type: 'bracket', groupId: 'p' + p, pairRole: 'close' };
+        placed = true;
+      }
+    }
+
+    for (let c = 0; c < 2; c++){
+      for (let i = 0; i < total; i++){
+        if (cols[c][i] === null){
+          cols[c][i] = { ch: JUNK_POOL[Math.floor(Math.random() * JUNK_POOL.length)], type: 'junk' };
+        }
+      }
+    }
+    return cols;
+  }
+
+  function renderCell(cell){
+    let cls = 'tc';
+    let attrs = '';
+    if (cell.type === 'word'){
+      cls += ' word';
+      const state = wordStates[cell.wordIndex];
+      if (state === 'correct') cls += ' correct';
+      if (state === 'tried_wrong') cls += ' disabled';
+      if (state === 'removed_dud') cls += ' disabled dud';
+      attrs = ' data-group="' + cell.groupId + '" data-role="word" data-widx="' + cell.wordIndex + '"';
+    } else if (cell.type === 'bracket'){
+      cls += ' bracket';
+      if (pairUsed[cell.groupId]) cls += ' used';
+      attrs = ' data-group="' + cell.groupId + '" data-role="bracket"';
+    } else {
+      cls += ' junk';
+      attrs = ' data-role="junk"';
+    }
+    return '<span class="' + cls + '"' + attrs + '>' + escapeHtml(cell.ch) + '</span>';
+  }
+
+  function renderDump(){
+    let html = '';
+    for (let c = 0; c < 2; c++){
+      html += '<div class="pipboy-col">';
+      for (let r = 0; r < ROWS; r++){
+        const addr = c === 0 ? (baseAddr + r * 0xC) : (baseAddr + ROWS * 0xC + r * 0xC);
+        const addrHex = '0x' + (addr & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        html += '<div class="term-row"><span class="term-addr">' + addrHex + '</span><span class="term-chars">';
+        for (let i = 0; i < ROWLEN; i++){
+          html += renderCell(colArrays[c][r * ROWLEN + i]);
+        }
+        html += '</span></div>';
+      }
+      html += '</div>';
+    }
+    dumpEl.innerHTML = html;
+  }
+
+  function renderPips(){
+    let html = '';
+    for (let i = 0; i < ATTEMPTS_ALLOWED; i++){
+      html += '<span class="pip' + (i < attemptsLeft ? '' : ' empty') + '"></span>';
+    }
+    pipsEl.innerHTML = html;
+    attemptsLabelEl.textContent = attemptsLeft + ' ATTEMPT(S) LEFT:';
+  }
+
+  function renderStats(){
+    statPlayed.textContent = stats.played;
+    statWon.textContent = stats.won;
+    statLost.textContent = stats.lost;
+  }
+
+  function addFeed(text, kind){
+    const line = document.createElement('div');
+    line.className = 'f-' + (kind || 'info');
+    line.textContent = text;
+    feedEl.appendChild(line);
+    feedEl.scrollTop = feedEl.scrollHeight;
+  }
+
+  function handleWordClick(idx){
+    if (roundOver || wordStates[idx] !== 'active') return;
+    const word = words[idx];
+    addFeed('>' + word, 'info');
+
+    if (idx === secretIdx){
+      wordStates[idx] = 'correct';
+      roundOver = true;
+      stats.played++; stats.won++;
+      addFeed('>Entry granted.', 'good');
+      renderStats();
+    } else {
+      wordStates[idx] = 'tried_wrong';
+      attemptsLeft--;
+      const l = likeness(word, words[secretIdx]);
+      addFeed('>Entry denied.', 'bad');
+      addFeed('>' + l + '/' + word.length + ' correct.', 'bad');
+      renderPips();
+      if (attemptsLeft <= 0){
+        roundOver = true;
+        stats.played++; stats.lost++;
+        addFeed('>Terminal locked.', 'bad');
+        addFeed('>Password was: ' + words[secretIdx], 'bad');
+        renderStats();
+      }
+    }
+    renderDump();
+  }
+
+  function handleBracketClick(gid){
+    if (roundOver || pairUsed[gid]) return;
+    pairUsed[gid] = true;
+
+    const activeWrong = [];
+    wordStates.forEach(function(s, i){ if (s === 'active' && i !== secretIdx) activeWrong.push(i); });
+
+    let effect = null;
+    if (attemptsLeft < ATTEMPTS_ALLOWED && (activeWrong.length === 0 || Math.random() < 0.5)){
+      effect = 'reset';
+    } else if (activeWrong.length > 0){
+      effect = 'dud';
+    } else if (attemptsLeft < ATTEMPTS_ALLOWED){
+      effect = 'reset';
+    }
+
+    if (effect === 'dud'){
+      const pick = activeWrong[Math.floor(Math.random() * activeWrong.length)];
+      wordStates[pick] = 'removed_dud';
+      addFeed('>Dud removed: ' + words[pick], 'good');
+    } else if (effect === 'reset'){
+      attemptsLeft = ATTEMPTS_ALLOWED;
+      renderPips();
+      addFeed('>Attempts reset!', 'good');
+    } else {
+      addFeed('>...', 'info');
+    }
+    renderDump();
+  }
+
+  dumpEl.addEventListener('click', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (!el) return;
+    const role = el.getAttribute('data-role');
+    if (role === 'word'){
+      handleWordClick(parseInt(el.getAttribute('data-widx'), 10));
+    } else if (role === 'bracket'){
+      handleBracketClick(el.getAttribute('data-group'));
+    }
+  });
+
+  function setHighlight(el, on){
+    const gid = el.getAttribute('data-group');
+    if (gid){
+      const nodes = dumpEl.querySelectorAll('[data-group="' + gid.replace(/"/g, '\\"') + '"]');
+      Array.prototype.forEach.call(nodes, function(n){ n.classList.toggle('hl', on); });
+    } else {
+      el.classList.toggle('hl', on);
+    }
+  }
+
+  dumpEl.addEventListener('mouseover', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, true);
+  });
+  dumpEl.addEventListener('mouseout', function(e){
+    const el = e.target.closest ? e.target.closest('.tc') : null;
+    if (el) setHighlight(el, false);
+  });
+
+  function newGame(){
+    words = sampleWords(WORD_POOL, 8);
+    secretIdx = Math.floor(Math.random() * words.length);
+    wordStates = words.map(function(){ return 'active'; });
+    pairUsed = {};
+    attemptsLeft = ATTEMPTS_ALLOWED;
+    roundOver = false;
+    baseAddr = 0xF400 + Math.floor(Math.random() * 20) * 0xC;
+    colArrays = buildDump(words);
+    feedEl.innerHTML = '';
+    renderPips();
+    renderDump();
+  }
+
+  newGameBtn.addEventListener('click', newGame);
+  renderStats();
+  newGame();
+})();
+</script>
+
 </body></html>
