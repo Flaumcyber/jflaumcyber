@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entra ID Users and Groups - AZ-104</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+
+.header { margin-bottom: 2.5rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.75rem 2rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+.name-block { margin-top: 1.25rem; }
+.name-big { font-family: var(--sans); font-size: clamp(28px,5vw,42px); font-weight: 800; color: #E1F5EE; letter-spacing: -1.5px; line-height: 1; }
+.title-line { font-family: var(--mono); font-size: 13px; color: #9FE1CB; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.blink { animation: blink 1s step-end infinite; color: #5DCAA5; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.section { margin-bottom: 2.25rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; }
+.section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+.content-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 1rem;
+}
+.content-card h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.content-card h2 .badge { font-family: var(--mono); font-size: 10px; background: #E1F5EE; color: #085041; padding: 3px 8px; border-radius: 4px; font-weight: 400; }
+.content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
+.content-card p:last-child { margin-bottom: 0; }
+code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
+
+.code-block {
+  background: #04342C; border: 0.5px solid #0F6E56; border-radius: var(--radius-md);
+  padding: 1rem 1.25rem; font-family: var(--mono); font-size: 12px; color: #E1F5EE;
+  margin: 0.75rem 0; overflow-x: auto; line-height: 1.6; white-space: pre;
+}
+.code-block .comment { color: #5DCAA5; }
+.code-block .cmd-text { color: #9FE1CB; }
+
+.step-list { list-style: none; margin: 0.5rem 0; }
+.step-list li { font-size: 14px; color: var(--muted); line-height: 1.65; padding: 6px 0 6px 22px; position: relative; border-top: 0.5px solid var(--border); }
+.step-list li:first-child { border-top: none; }
+.step-list li::before { content: '\203A'; position: absolute; left: 2px; color: var(--green); font-size: 18px; line-height: 1.4; }
+.step-list li strong { color: var(--text); }
+
+.data-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 13px; }
+.data-table th { font-family: var(--mono); font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--border); }
+.data-table td { padding: 8px 12px; color: var(--muted); border-bottom: 0.5px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.tag { font-family: var(--mono); font-size: 11px; background: var(--bg3); border: 0.5px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; }
+
+.alert { background: var(--bg3); border: 0.5px solid var(--border); border-left: 3px solid #EF9F27; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0.75rem 0; }
+.alert strong { color: #EF9F27; }
+
+.shot { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin: 0.85rem 0 0.25rem 0; background: var(--bg3); min-height: 160px; display: flex; align-items: center; justify-content: center; }
+.shot img { width: 100%; display: block; }
+.shot-placeholder { font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 2.5rem 1rem; text-align: center; }
+.caption { font-family: var(--mono); color: var(--muted); font-size: 11px; margin: 5px 0 14px 0; }
+.caption::before { content: '// '; color: var(--green); }
+
+.iac-quote { text-align: center; font-style: italic; color: var(--text); font-size: 15px; line-height: 1.6; max-width: 620px; margin: 0 auto 1rem auto; }
+
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .terminal-body { padding: 1.25rem; }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">&larr; portfolio</a>
+    <span class="nav-sep">/</span>
+    <a href="az104-labs.html">az-104 labs</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">identity-governance</span>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title">~/az104/identity-governance - bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@az104lab</span>:~$ <span class="cmd">cat entra-id-users-groups.md</span></div>
+      <div class="name-block">
+        <div class="name-big" style="font-size:clamp(20px,3.6vw,32px);letter-spacing:-0.5px;">Entra ID Users, Groups, and Group-Based RBAC</div>
+        <div class="title-line">Domain: Manage Identities and Governance &middot; AZ-104 <span class="blink">&#9608;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>Creating Microsoft Entra ID users, organizing them into a security group, and assigning a role to the group rather than to individuals. This is the identity foundation the rest of the AZ-104 labs build on, and the group-based pattern is the practice tested most directly in the Identities and Governance domain.</p>
+      <div class="tag-row">
+        <span class="tag">Resource Group: rg-az104-identity</span>
+        <span class="tag">Microsoft Entra ID</span>
+        <span class="tag">RBAC</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// architecture</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Architecture Diagram</h2>
+      <div class="code-block">              jflaum.onmicrosoft.com (tenant)
+                              |
+                    +---------+---------+
+                    |                   |
+              Entra ID Users     Security Group
+              - jdoe               sg-az104-readers
+              - asmith                    |
+                    |               +-----+-----+
+                    +---------------+           |
+                    (group members)      Role Assignment
+                                          Reader at
+                                          rg-az104-identity scope
+      </div>
+      <div class="tag-row">
+        <span class="tag">Region: East US</span>
+        <span class="tag">Subscription: Azure Free Account</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT I BUILT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i built</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Steps</h2>
+      <p>Built out identity and access management using the group-based pattern instead of assigning roles directly to users.</p>
+      <ul class="step-list">
+        <li>Created two test users in Entra ID: <strong>jdoe</strong> and <strong>asmith</strong></li>
+        <li>Created a security group named <strong>sg-az104-readers</strong> and added both users as members</li>
+        <li>Assigned the built-in <strong>Reader</strong> role to the group at the resource group scope, rather than assigning it to each user individually</li>
+        <li>Verified the assignment using Check access in the Azure portal for one of the member users</li>
+      </ul>
+      <div class="alert"><strong>Note:</strong> Assigning roles to groups instead of individual users is the recommended practice because it scales. Adding or removing a user from the group changes their access automatically, without touching the role assignment itself.</div>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// screenshots</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Evidence</h2>
+      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Entra ID Users blade showing jdoe and asmith after creation</div></div>
+      <div class="caption">both test users created in Entra ID</div>
+
+      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Groups blade showing sg-az104-readers with membership list</div></div>
+      <div class="caption">security group with both users added as members</div>
+
+      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: IAM blade on rg-az104-identity showing Reader role assigned to the group, not the individual users</div></div>
+      <div class="caption">role assignment scoped to the resource group, assigned to the group</div>
+
+      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Check access result for jdoe confirming inherited Reader access via group membership</div></div>
+      <div class="caption">confirming the inherited access actually works</div>
+    </div>
+  </div>
+
+  <!-- IAC -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// infrastructure as code</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p class="iac-quote">"If you can build it again tomorrow without looking at yesterday's code, you've learned it. If you need to copy and paste it again, you've only completed a tutorial."</p>
+      <p>I am learning Infrastructure as Code deliberately, specifically Terraform and Bicep, rather than treating them as copy-paste snippets. The code below reflects actual understanding of each resource, not just reproduced boilerplate.</p>
+    </div>
+    <div class="content-card">
+      <h2>Terraform <span class="badge">.tf</span></h2>
+      <div class="code-block"><span class="comment"># main.tf
+# Requires the azuread and azurerm providers</span>
+
+terraform {
+  required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~&gt; 2.0"
+    }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~&gt; 3.0"
+    }
+  }
+}
+
+provider "azuread" {}
+provider "azurerm" {
+  features {}
+}
+
+<span class="comment"># Users</span>
+resource "azuread_user" "jdoe" {
+  user_principal_name = "jdoe@jflaum.onmicrosoft.com"
+  display_name        = "J Doe"
+  password             = "ChangeMe123!"
+}
+
+resource "azuread_user" "asmith" {
+  user_principal_name = "asmith@jflaum.onmicrosoft.com"
+  display_name        = "A Smith"
+  password             = "ChangeMe123!"
+}
+
+<span class="comment"># Security group</span>
+resource "azuread_group" "readers" {
+  display_name     = "sg-az104-readers"
+  security_enabled = true
+}
+
+resource "azuread_group_member" "jdoe_member" {
+  group_object_id  = azuread_group.readers.object_id
+  member_object_id = azuread_user.jdoe.object_id
+}
+
+resource "azuread_group_member" "asmith_member" {
+  group_object_id  = azuread_group.readers.object_id
+  member_object_id = azuread_user.asmith.object_id
+}
+
+<span class="comment"># Resource group and group-based role assignment</span>
+resource "azurerm_resource_group" "identity" {
+  name     = "rg-az104-identity"
+  location = "eastus"
+}
+
+resource "azurerm_role_assignment" "readers_reader" {
+  scope                = azurerm_resource_group.identity.id
+  role_definition_name = "Reader"
+  principal_id         = azuread_group.readers.object_id
+}
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Bicep <span class="badge">.bicep</span></h2>
+      <p>Entra ID users and groups are managed through Microsoft Graph rather than Azure Resource Manager, so Bicep is used here only for the resource group and the role assignment. The group itself is created ahead of time through the Azure CLI or PowerShell, and its object ID is passed in as a parameter.</p>
+      <div class="code-block"><span class="comment">// main.bicep
+// Deploys the resource group scope role assignment
+// The security group must already exist; pass its object ID as a parameter</span>
+
+targetScope = 'subscription'
+
+param location string = 'eastus'
+param readersGroupObjectId string
+
+resource identityRg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
+  name: 'rg-az104-identity'
+  location: location
+}
+
+module readerAssignment 'roleAssignment.bicep' = {
+  name: 'readerAssignment'
+  scope: identityRg
+  params: {
+    principalId: readersGroupObjectId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')
+  }
+}
+
+<span class="comment">// roleAssignment.bicep</span>
+param principalId string
+param roleDefinitionId string
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, principalId, roleDefinitionId)
+  properties: {
+    principalId: principalId
+    roleDefinitionId: roleDefinitionId
+    principalType: 'Group'
+  }
+}
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND LINE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// command line</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>PowerShell</h2>
+      <div class="code-block"><span class="comment"># Requires the Microsoft.Graph and Az PowerShell modules
+# Connect first: Connect-MgGraph -Scopes "User.ReadWrite.All","Group.ReadWrite.All"
+# Connect-AzAccount</span>
+
+<span class="comment"># Create users</span>
+$PasswordProfile = @{
+    Password = "ChangeMe123!"
+}
+
+New-MgUser -DisplayName "J Doe" `
+    -UserPrincipalName "jdoe@jflaum.onmicrosoft.com" `
+    -MailNickname "jdoe" `
+    -AccountEnabled `
+    -PasswordProfile $PasswordProfile
+
+New-MgUser -DisplayName "A Smith" `
+    -UserPrincipalName "asmith@jflaum.onmicrosoft.com" `
+    -MailNickname "asmith" `
+    -AccountEnabled `
+    -PasswordProfile $PasswordProfile
+
+<span class="comment"># Create the security group</span>
+$Group = New-MgGroup -DisplayName "sg-az104-readers" `
+    -MailEnabled:$false `
+    -MailNickname "sgaz104readers" `
+    -SecurityEnabled
+
+<span class="comment"># Add both users as members</span>
+$JDoe = Get-MgUser -Filter "userPrincipalName eq 'jdoe@jflaum.onmicrosoft.com'"
+$ASmith = Get-MgUser -Filter "userPrincipalName eq 'asmith@jflaum.onmicrosoft.com'"
+
+New-MgGroupMember -GroupId $Group.Id -DirectoryObjectId $JDoe.Id
+New-MgGroupMember -GroupId $Group.Id -DirectoryObjectId $ASmith.Id
+
+<span class="comment"># Assign Reader at the resource group scope, to the group</span>
+New-AzRoleAssignment -ObjectId $Group.Id `
+    -RoleDefinitionName "Reader" `
+    -ResourceGroupName "rg-az104-identity"
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Azure CLI</h2>
+      <div class="code-block"><span class="comment"># Sign in first: az login</span>
+
+<span class="comment"># Create users</span>
+az ad user create \
+  --display-name "J Doe" \
+  --user-principal-name jdoe@jflaum.onmicrosoft.com \
+  --password "ChangeMe123!" \
+  --force-change-password-next-sign-in true
+
+az ad user create \
+  --display-name "A Smith" \
+  --user-principal-name asmith@jflaum.onmicrosoft.com \
+  --password "ChangeMe123!" \
+  --force-change-password-next-sign-in true
+
+<span class="comment"># Create the security group</span>
+az ad group create \
+  --display-name "sg-az104-readers" \
+  --mail-nickname "sgaz104readers"
+
+<span class="comment"># Add both users as members</span>
+az ad group member add --group "sg-az104-readers" --member-id $(az ad user show --id jdoe@jflaum.onmicrosoft.com --query id -o tsv)
+az ad group member add --group "sg-az104-readers" --member-id $(az ad user show --id asmith@jflaum.onmicrosoft.com --query id -o tsv)
+
+<span class="comment"># Assign Reader at the resource group scope, to the group</span>
+GROUP_ID=$(az ad group show --group "sg-az104-readers" --query id -o tsv)
+
+az role assignment create \
+  --assignee-object-id "$GROUP_ID" \
+  --assignee-principal-type Group \
+  --role "Reader" \
+  --resource-group rg-az104-identity
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT I LEARNED -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i learned</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <ul class="step-list">
+        <li><strong>Group-based RBAC scales better than per-user assignment.</strong> Adding or removing someone from the group changes their access automatically, and it keeps the role assignment list on the resource itself short and auditable.</li>
+        <li><strong>Object IDs, not display names, are what role assignments actually reference.</strong> The portal shows friendly names, but every assignment under the hood is tied to an immutable object ID, which is why the CLI and PowerShell commands above resolve the group and users to their IDs before assigning anything.</li>
+        <li><strong>Entra ID resources sit outside standard ARM/Bicep resource types.</strong> Bicep can assign roles to a group, but it cannot create the group itself without the Microsoft Graph Bicep extension, so the group has to exist first through the CLI, PowerShell, or the portal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">// az-104 lab &middot; <a href="README-az104-identity-governance.md" style="color:var(--green);text-decoration:none;">README</a> &middot; <a href="az104-labs.html" style="color:var(--green);text-decoration:none;">&larr; back to az-104 labs</a></div>
+
+</div>
+</body>
+</html>
