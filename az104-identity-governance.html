@@ -218,17 +218,32 @@ code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
     <div class="section-header"><span class="section-label">// screenshots</span><div class="section-line"></div></div>
     <div class="content-card">
       <h2>Evidence</h2>
-      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Entra ID Users blade showing jdoe and asmith after creation</div></div>
-      <div class="caption">both test users created in Entra ID</div>
+      <div class="shot"><img src="img/az104-identity-governance/01-create-resource-group.png" alt="Creating the rg-az104-identity resource group"></div>
+      <div class="caption">creating the rg-az104-identity resource group</div>
 
-      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Groups blade showing sg-az104-readers with membership list</div></div>
-      <div class="caption">security group with both users added as members</div>
+      <div class="shot"><img src="img/az104-identity-governance/02-create-user-jdoe.png" alt="Creating the jdoe test user in Entra ID"></div>
+      <div class="caption">creating the first test user, jdoe</div>
 
-      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: IAM blade on rg-az104-identity showing Reader role assigned to the group, not the individual users</div></div>
-      <div class="caption">role assignment scoped to the resource group, assigned to the group</div>
+      <div class="shot"><img src="img/az104-identity-governance/03-create-user-asmith.png" alt="Creating the asmith test user in Entra ID"></div>
+      <div class="caption">creating the second test user, asmith</div>
 
-      <div class="shot"><div class="shot-placeholder">Screenshot placeholder: Check access result for jdoe confirming inherited Reader access via group membership</div></div>
-      <div class="caption">confirming the inherited access actually works</div>
+      <div class="shot"><img src="img/az104-identity-governance/04-create-security-group.png" alt="Creating the sg-az104-readers security group"></div>
+      <div class="caption">creating the sg-az104-readers security group</div>
+
+      <div class="shot"><img src="img/az104-identity-governance/05-add-group-members.png" alt="Adding jdoe and asmith as members of the security group"></div>
+      <div class="caption">adding both users as members of the group</div>
+
+      <div class="shot"><img src="img/az104-identity-governance/06-iam-grant-access.png" alt="IAM blade on rg-az104-identity, starting a role assignment"></div>
+      <div class="caption">starting the role assignment from IAM on rg-az104-identity</div>
+
+      <div class="shot"><img src="img/az104-identity-governance/07-assign-reader-to-group.png" alt="Assigning the Reader role to the sg-az104-readers group"></div>
+      <div class="caption">assigning Reader to the group, not the individual users</div>
+
+      <div class="shot"><img src="img/az104-identity-governance/08-role-assignments-list.png" alt="Role assignments list confirming Reader assigned to the group"></div>
+      <div class="caption">role assignments list confirming Reader is scoped to the group</div>
+
+      <div class="shot"><img src="img/az104-identity-governance/09-jdoe-inherited-access.png" alt="jdoe's assignments showing inherited Reader access via the group"></div>
+      <div class="caption">confirming jdoe's Reader access is inherited through the group, not assigned directly</div>
     </div>
   </div>
 
