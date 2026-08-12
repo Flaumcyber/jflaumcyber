@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Container Apps - AZ-104</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* NAV */
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+
+/* HEADER */
+.header { margin-bottom: 2.5rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.75rem 2rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+.name-block { margin-top: 1.25rem; }
+.name-big { font-family: var(--sans); font-size: clamp(28px,5vw,42px); font-weight: 800; color: #E1F5EE; letter-spacing: -1.5px; line-height: 1; }
+.title-line { font-family: var(--mono); font-size: 13px; color: #9FE1CB; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.blink { animation: blink 1s step-end infinite; color: #5DCAA5; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* SECTIONS */
+.section { margin-bottom: 2.25rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; }
+.section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+/* CONTENT CARDS */
+.content-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 1rem;
+}
+.content-card h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.content-card h2 .badge { font-family: var(--mono); font-size: 10px; background: #E1F5EE; color: #085041; padding: 3px 8px; border-radius: 4px; font-weight: 400; }
+.content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
+.content-card p:last-child { margin-bottom: 0; }
+code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
+
+/* CODE BLOCKS */
+.code-block {
+  background: #04342C; border: 0.5px solid #0F6E56; border-radius: var(--radius-md);
+  padding: 1rem 1.25rem; font-family: var(--mono); font-size: 12px; color: #E1F5EE;
+  margin: 0.75rem 0; overflow-x: auto; line-height: 1.6; white-space: pre;
+}
+.code-block .comment { color: #5DCAA5; }
+.code-block .cmd-text { color: #9FE1CB; }
+
+/* STEP LIST */
+.step-list { list-style: none; margin: 0.5rem 0; }
+.step-list li { font-size: 14px; color: var(--muted); line-height: 1.65; padding: 6px 0 6px 22px; position: relative; border-top: 0.5px solid var(--border); }
+.step-list li:first-child { border-top: none; }
+.step-list li::before { content: '\203A'; position: absolute; left: 2px; color: var(--green); font-size: 18px; line-height: 1.4; }
+.step-list li strong { color: var(--text); }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 13px; }
+.data-table th { font-family: var(--mono); font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--border); }
+.data-table td { padding: 8px 12px; color: var(--muted); border-bottom: 0.5px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+
+/* TAGS */
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.tag { font-family: var(--mono); font-size: 11px; background: var(--bg3); border: 0.5px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; }
+
+/* ALERT */
+.alert { background: var(--bg3); border: 0.5px solid var(--border); border-left: 3px solid #EF9F27; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0.75rem 0; }
+.alert strong { color: #EF9F27; }
+
+/* SCREENSHOTS */
+.shot { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin: 0.85rem 0 0.25rem 0; background: var(--bg3); min-height: 160px; display: flex; align-items: center; justify-content: center; }
+.shot img { width: 100%; display: block; }
+.shot-placeholder { font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 2.5rem 1rem; text-align: center; }
+.caption { font-family: var(--mono); color: var(--muted); font-size: 11px; margin: 5px 0 14px 0; }
+.caption::before { content: '// '; color: var(--green); }
+
+/* IAC QUOTE */
+.iac-quote { text-align: center; font-style: italic; color: var(--text); font-size: 15px; line-height: 1.6; max-width: 620px; margin: 0 auto 1rem auto; }
+
+/* SUB-TABS FOR CODE (IaC / CLI) */
+.code-tabs { display: flex; gap: 8px; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.code-tab-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .terminal-body { padding: 1.25rem; }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">&larr; portfolio</a>
+    <span class="nav-sep">/</span>
+    <a href="az104-labs.html">az-104 labs</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">container-apps</span>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title">~/az104/container-apps - bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@az104lab</span>:~$ <span class="cmd">cat container-apps.md</span></div>
+      <div class="name-block">
+        <div class="name-big" style="font-size:clamp(22px,3.8vw,36px);letter-spacing:-0.5px;">Azure Container Apps</div>
+        <div class="title-line">Domain: Deploy and Manage Compute Resources &middot; AZ-104 <span class="blink">&#9608;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>Deployed a public quickstart container image to Azure Container Apps, the last lab in the Compute domain and the point where the domain's story finally closes: VMs, to Availability Sets and Scale Sets, to a fully serverless container platform that scales to zero. Built entirely through the portal wizard, since Container Apps genuinely walks environment and app creation through together in one flow.</p>
+      <div class="tag-row">
+        <span class="tag">Resource Group: rg-az104-containerapps</span>
+        <span class="tag">Container Apps Environment</span>
+        <span class="tag">Serverless Containers</span>
+        <span class="tag">Scale to Zero</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE DIAGRAM -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// architecture</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Architecture Diagram</h2>
+      <div class="code-block">                    rg-az104-containerapps
+                    Region: East US 2
+                              |
+                +-------------+--------------+
+                |                             |
+        cae-az104-demo               workspacergaz104...8d2a
+        (Container Apps Environment)  (Log Analytics, auto-created)
+                |
+        ca-az104-demo
+        Quickstart hello-world image
+        Ingress: enabled, port 80
+        Scale: min 0, max 10 replicas
+        Scale rule: http-scaler (HTTP scaling)
+        Application Url: public, live
+      </div>
+      <div class="tag-row">
+        <span class="tag">Region: East US 2</span>
+        <span class="tag">Min Replicas: 0</span>
+        <span class="tag">Max Replicas: 10</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY THESE CHOICES -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// why these choices</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>The portal instead of CLI, for this lab specifically</h2>
+      <p>Container Apps' portal wizard combines environment creation and app deployment into a single guided flow, which made it a genuinely better first-exposure path than the CLI equivalent, which requires several separate commands and more upfront knowledge of the resource model. The CLI and PowerShell equivalents are documented below and are the intended path for revisiting this lab after the full AZ-104 series is complete.</p>
+    </div>
+    <div class="content-card">
+      <h2>Microsoft's quickstart image instead of a custom container</h2>
+      <p>Using <code class="inline">mcr.microsoft.com/azuredocs/containerapps-helloworld:latest</code> kept this lab focused on Container Apps as a compute and scaling platform, rather than turning it into a container registry and image-build lab as well. Azure Container Registry and custom image builds are a natural extension for a later, dedicated lab.</p>
+    </div>
+    <div class="content-card">
+      <h2>Min replicas of 0, left at its default rather than raised</h2>
+      <p>This is the single clearest technical distinction from Lab 3.3's VM Scale Set, which always keeps at least its minimum instance count running and billing. Leaving min replicas at 0 here demonstrates the actual value proposition of serverless containers directly, rather than describing it abstractly: this app can scale down to genuinely zero running compute when idle, something no VM-based option in this domain can do.</p>
+    </div>
+  </div>
+
+  <!-- WHAT I BUILT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i built</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Steps</h2>
+      <p>Deployed environment and app together through the portal wizard, then verified live traffic, scaling configuration, and revision history.</p>
+      <ul class="step-list">
+        <li>Confirmed the Microsoft.App resource provider was registered on the subscription</li>
+        <li>Created rg-az104-containerapps in East US 2</li>
+        <li>Created cae-az104-demo (Container Apps Environment) and ca-az104-demo (Container App) together via the portal's combined creation wizard, using the built-in quickstart hello-world image with ingress enabled on port 80</li>
+        <li>Noted the auto-created Log Analytics workspace (workspacergaz104containerapps8d2a), required by the environment for logging</li>
+        <li>Confirmed the app's status as Running and loaded its live public Application Url in a browser, seeing the hello-world page render</li>
+        <li>Reviewed the Scale blade: min replicas 0, max replicas 10, an http-scaler rule already attached</li>
+        <li>Reviewed Revisions and replicas, confirming one active revision running</li>
+        <li>Deleted rg-az104-containerapps in full, removing the app, environment, and workspace together</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// screenshots</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Evidence</h2>
+      <div class="shot"><img src="img/az104-container-apps/01-containerapp-environment-created.png" alt="Resource group showing the Container Apps environment and Log Analytics workspace deployed"></div>
+      <div class="caption">rg-az104-containerapps after the combined creation wizard finished: cae-az104-demo, ca-az104-demo, and the auto-created Log Analytics workspace, deployment status Succeeded</div>
+
+      <div class="shot"><img src="img/az104-container-apps/02-containerapp-deployed.png" alt="Container app overview confirming Running status next to the live hello-world page loaded in a browser"></div>
+      <div class="caption">ca-az104-demo confirmed Running in the portal (left) next to the actual hello-world page loading live from its public Application Url (right), real end-to-end proof rather than just a status field</div>
+
+      <div class="shot"><img src="img/az104-container-apps/03-containerapp-scaling-config.png" alt="Scale blade showing min replicas 0, max replicas 10, and an http-scaler rule"></div>
+      <div class="caption">min replicas 0, max replicas 10, http-scaler rule attached, current replica count 1 from recent traffic, the concrete difference from a VM Scale Set's always-on minimum</div>
+
+      <div class="shot"><img src="img/az104-container-apps/04-containerapp-revision-history.png" alt="Revisions and replicas page showing one active, running revision"></div>
+      <div class="caption">Revisions and replicas, one active revision running, the baseline for how Container Apps versions deployments even before a second revision exists to compare against</div>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE AS CODE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// infrastructure as code</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p class="iac-quote">"If you can build it again tomorrow without looking at yesterday's code, you've learned it. If you need to copy and paste it again, you've only completed a tutorial."</p>
+      <p>I am learning Infrastructure as Code deliberately, specifically Terraform and Bicep, rather than treating them as copy-paste snippets. This lab was built through the portal, so the code below is the deliberate as-code equivalent of what the wizard did, written to understand the resource model, not copied from a generated template.</p>
+    </div>
+    <div class="content-card">
+      <h2>Terraform <span class="badge">.tf</span></h2>
+      <div class="code-block"><span class="comment"># main.tf</span>
+
+resource "azurerm_resource_group" "containerapps" {
+  name     = "rg-az104-containerapps"
+  location = "eastus2"
+}
+
+resource "azurerm_log_analytics_workspace" "demo" {
+  name                = "law-az104-containerapps"
+  location            = azurerm_resource_group.containerapps.location
+  resource_group_name = azurerm_resource_group.containerapps.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_container_app_environment" "demo" {
+  name                       = "cae-az104-demo"
+  location                   = azurerm_resource_group.containerapps.location
+  resource_group_name        = azurerm_resource_group.containerapps.name
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.demo.id
+}
+
+resource "azurerm_container_app" "demo" {
+  name                         = "ca-az104-demo"
+  container_app_environment_id = azurerm_container_app_environment.demo.id
+  resource_group_name          = azurerm_resource_group.containerapps.name
+  revision_mode                = "Single"
+
+  template {
+    min_replicas = 0
+    max_replicas = 10
+
+    container {
+      name   = "containerapps-helloworld"
+      image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
+      cpu    = 0.25
+      memory = "0.5Gi"
+    }
+  }
+
+  ingress {
+    external_enabled = true
+    target_port       = 80
+
+    traffic_weight {
+      percentage      = 100
+      latest_revision = true
+    }
+  }
+}
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Bicep <span class="badge">.bicep</span></h2>
+      <p>Bicep's resource model mirrors what the portal wizard actually created step for step: a Log Analytics workspace, a Container Apps environment tied to it, and the app itself referencing the environment and defining its own scale and ingress rules.</p>
+      <div class="code-block"><span class="comment">// main.bicep</span>
+
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: 'law-az104-containerapps'
+  location: 'eastus2'
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+  }
+}
+
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' = {
+  name: 'cae-az104-demo'
+  location: 'eastus2'
+  properties: {
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: logAnalytics.properties.customerId
+        sharedKey: logAnalytics.listKeys().primarySharedKey
+      }
+    }
+  }
+}
+
+resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
+  name: 'ca-az104-demo'
+  location: 'eastus2'
+  properties: {
+    managedEnvironmentId: containerAppEnv.id
+    configuration: {
+      ingress: {
+        external: true
+        targetPort: 80
+      }
+    }
+    template: {
+      containers: [
+        {
+          name: 'containerapps-helloworld'
+          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          resources: {
+            cpu: json('0.25')
+            memory: '0.5Gi'
+          }
+        }
+      ]
+      scale: {
+        minReplicas: 0
+        maxReplicas: 10
+      }
+    }
+  }
+}
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND LINE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// command line</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>PowerShell</h2>
+      <div class="code-block"><span class="comment"># Connect first: Connect-AzAccount
+# Note: this lab was built via portal; commands below are the equivalent path for a future revisit</span>
+
+New-AzResourceGroup -Name "rg-az104-containerapps" -Location "East US 2"
+
+<span class="comment"># Az.App module handles Container Apps</span>
+New-AzContainerAppManagedEnv -EnvName "cae-az104-demo" `
+    -ResourceGroupName "rg-az104-containerapps" -Location "East US 2"
+
+New-AzContainerApp -Name "ca-az104-demo" -ResourceGroupName "rg-az104-containerapps" `
+    -Location "East US 2" -ManagedEnvironmentId (Get-AzContainerAppManagedEnv -EnvName "cae-az104-demo" -ResourceGroupName "rg-az104-containerapps").Id `
+    -TemplateContainer @{ Name = "containerapps-helloworld"; Image = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" } `
+    -IngressExternal $true -IngressTargetPort 80
+
+<span class="comment"># Confirm status</span>
+(Get-AzContainerApp -Name "ca-az104-demo" -ResourceGroupName "rg-az104-containerapps").ProvisioningState
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Azure CLI</h2>
+      <div class="code-block"><span class="comment"># Sign in first: az login</span>
+
+az provider register --namespace Microsoft.App
+az provider show --namespace Microsoft.App --query "registrationState" -o tsv
+
+az group create --resource-group rg-az104-containerapps --location eastus2
+
+<span class="comment"># containerapp extension installs automatically on first use if missing</span>
+az containerapp env create \
+  --name cae-az104-demo \
+  --resource-group rg-az104-containerapps \
+  --location eastus2
+
+az containerapp create \
+  --name ca-az104-demo \
+  --resource-group rg-az104-containerapps \
+  --environment cae-az104-demo \
+  --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest \
+  --target-port 80 \
+  --ingress external \
+  --min-replicas 0 \
+  --max-replicas 10
+
+<span class="comment"># Confirm live and get the public URL</span>
+az containerapp show --name ca-az104-demo --resource-group rg-az104-containerapps --query "properties.configuration.ingress.fqdn" -o tsv
+
+<span class="comment"># Clean up, full resource group (removes app, environment, and Log Analytics workspace)</span>
+az group delete --name rg-az104-containerapps --yes --no-wait
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT I LEARNED -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i learned</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <ul class="step-list">
+        <li><strong>Container Apps environments require a Log Analytics workspace, and it's created automatically.</strong> This isn't optional infrastructure the way an NSG or public IP can sometimes be skipped, it's a hard dependency for logging. Worth remembering it exists for teardown purposes even though deleting the resource group handles it automatically.</li>
+        <li><strong>Scaling to zero is a genuinely different cost model, not just a smaller number.</strong> A VM Scale Set's minimum replica count is still whole VMs, each billing continuously. A Container App with min replicas set to 0 can have zero running compute and zero compute cost during idle periods, only scaling up (and only billing) when traffic actually arrives. That's the real distinction between "elastic" and "serverless."</li>
+        <li><strong>The portal's combined environment-and-app wizard is a genuinely good learning path for a first exposure to a new Azure service.</strong> Seeing environment creation and app deployment happen together in one guided flow, rather than as separate CLI commands run in sequence, made the relationship between the two resource types clearer than reading documentation about them would have.</li>
+        <li><strong>Revisions exist from the very first deployment, not just after an update.</strong> Even a single, never-updated Container App already has a named revision (ca-az104-demo--lpewvfn in this case). Understanding that a revision is Container Apps' fundamental unit of deployment, not an optional versioning feature you opt into later, matters for how blue-green deployments and traffic splitting work in future labs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">// az-104 lab &middot; <a href="README-az104-container-apps.md" style="color:var(--green);text-decoration:none;">README</a> &middot; <a href="az104-labs.html" style="color:var(--green);text-decoration:none;">&larr; back to az-104 labs</a></div>
+
+</div>
+</body>
+</html>
