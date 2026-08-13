@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VNet, Subnets, and NSGs - AZ-104</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #1D9E75;
+  --green-dim: #0F6E56;
+  --green-glow: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --bg: #ffffff;
+  --bg2: #f6f6f4;
+  --bg3: #ededea;
+  --text: #1a1a18;
+  --muted: #5f5e5a;
+  --border: rgba(0,0,0,0.12);
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --bg2: #1c1c1a;
+    --bg3: #242422;
+    --text: #f0ede6;
+    --muted: #9e9c96;
+    --border: rgba(255,255,255,0.1);
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+.container { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* NAV */
+.nav { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px;
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav a:hover { border-color: var(--green); color: var(--green); }
+.nav-sep { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.nav-current { font-family: var(--mono); font-size: 11px; color: var(--green); }
+
+/* HEADER */
+.header { margin-bottom: 2.5rem; }
+.terminal-bar {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2);
+  border: 0.5px solid var(--border); border-radius: var(--radius-md) var(--radius-md) 0 0; padding: 9px 14px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-r { background: #E24B4A; } .dot-y { background: #EF9F27; } .dot-g { background: #1D9E75; }
+.term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  background: #04342C; border: 0.5px solid #0F6E56; border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 1.75rem 2rem; font-family: var(--mono);
+}
+.prompt { color: #9FE1CB; font-size: 13px; margin-bottom: 4px; }
+.prompt .p-user { color: #5DCAA5; }
+.cmd { color: #E1F5EE; }
+.name-block { margin-top: 1.25rem; }
+.name-big { font-family: var(--sans); font-size: clamp(28px,5vw,42px); font-weight: 800; color: #E1F5EE; letter-spacing: -1.5px; line-height: 1; }
+.title-line { font-family: var(--mono); font-size: 13px; color: #9FE1CB; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.blink { animation: blink 1s step-end infinite; color: #5DCAA5; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* SECTIONS */
+.section { margin-bottom: 2.25rem; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; }
+.section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+/* CONTENT CARDS */
+.content-card {
+  background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--green);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 1rem;
+}
+.content-card h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.content-card h2 .badge { font-family: var(--mono); font-size: 10px; background: #E1F5EE; color: #085041; padding: 3px 8px; border-radius: 4px; font-weight: 400; }
+.content-card p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0.75rem; }
+.content-card p:last-child { margin-bottom: 0; }
+code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
+
+/* CODE BLOCKS */
+.code-block {
+  background: #04342C; border: 0.5px solid #0F6E56; border-radius: var(--radius-md);
+  padding: 1rem 1.25rem; font-family: var(--mono); font-size: 12px; color: #E1F5EE;
+  margin: 0.75rem 0; overflow-x: auto; line-height: 1.6; white-space: pre;
+}
+.code-block .comment { color: #5DCAA5; }
+.code-block .cmd-text { color: #9FE1CB; }
+
+/* STEP LIST */
+.step-list { list-style: none; margin: 0.5rem 0; }
+.step-list li { font-size: 14px; color: var(--muted); line-height: 1.65; padding: 6px 0 6px 22px; position: relative; border-top: 0.5px solid var(--border); }
+.step-list li:first-child { border-top: none; }
+.step-list li::before { content: '\203A'; position: absolute; left: 2px; color: var(--green); font-size: 18px; line-height: 1.4; }
+.step-list li strong { color: var(--text); }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 13px; }
+.data-table th { font-family: var(--mono); font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--border); }
+.data-table td { padding: 8px 12px; color: var(--muted); border-bottom: 0.5px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+
+/* TAGS */
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.tag { font-family: var(--mono); font-size: 11px; background: var(--bg3); border: 0.5px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; }
+
+/* ALERT */
+.alert { background: var(--bg3); border: 0.5px solid var(--border); border-left: 3px solid #EF9F27; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0.75rem 0; }
+.alert strong { color: #EF9F27; }
+
+/* SCREENSHOTS */
+.shot { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin: 0.85rem 0 0.25rem 0; background: var(--bg3); min-height: 160px; display: flex; align-items: center; justify-content: center; }
+.shot img { width: 100%; display: block; }
+.shot-placeholder { font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 2.5rem 1rem; text-align: center; }
+.caption { font-family: var(--mono); color: var(--muted); font-size: 11px; margin: 5px 0 14px 0; }
+.caption::before { content: '// '; color: var(--green); }
+
+/* IAC QUOTE */
+.iac-quote { text-align: center; font-style: italic; color: var(--text); font-size: 15px; line-height: 1.6; max-width: 620px; margin: 0 auto 1rem auto; }
+
+/* SUB-TABS FOR CODE (IaC / CLI) */
+.code-tabs { display: flex; gap: 8px; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.code-tab-label { font-family: var(--mono); font-size: 11px; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+
+@media (max-width: 480px) {
+  .container { padding: 1.5rem 1rem 4rem; }
+  .terminal-body { padding: 1.25rem; }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="nav">
+    <a href="index.html">&larr; portfolio</a>
+    <span class="nav-sep">/</span>
+    <a href="az104-labs.html">az-104 labs</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">vnet-nsg</span>
+  </nav>
+
+  <div class="header">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="term-title">~/az104/vnet-nsg - bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt"><span class="p-user">user@az104lab</span>:~$ <span class="cmd">cat vnet-nsg.md</span></div>
+      <div class="name-block">
+        <div class="name-big" style="font-size:clamp(24px,4.2vw,38px);letter-spacing:-0.5px;">VNet, Subnets, and NSGs</div>
+        <div class="title-line">Domain: Configure and Manage Virtual Networks &middot; AZ-104 <span class="blink">&#9608;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// about</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p>The first lab in the Networking domain: a Virtual Network with two subnets, a Network Security Group with explicit inbound rules, and a real traffic test against a deployed VM to prove the rule actually worked, not just that it looked correct in the portal. Along the way, caught and fixed a genuine misconfiguration, a rule named Deny that was actually set to Allow, which turned out to be the most valuable part of the lab.</p>
+      <div class="tag-row">
+        <span class="tag">Resource Group: rg-az104-vnet-nsg</span>
+        <span class="tag">Virtual Network</span>
+        <span class="tag">Network Security Group</span>
+        <span class="tag">Subnet-Level Association</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE DIAGRAM -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// architecture</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Architecture Diagram</h2>
+      <div class="code-block">                    rg-az104-vnet-nsg
+                    Region: East US 2
+                              |
+                    vnet-az104-demo
+                    10.1.0.0/16
+                              |
+                +-------------+--------------+
+                |                             |
+        snet-frontend                snet-backend
+        10.1.1.0/24                  10.1.2.0/24
+                |
+        nsg-az104-frontend (associated at subnet level)
+        100  Allow-HTTP-Inbound   TCP 80    Allow
+        110  Deny-RDP-Inbound     TCP 3389  Deny
+        65000-65500  Azure defaults
+                |
+        vm-az104-nsgtest (test VM, deleted after verification)
+        RDP connection attempt: blocked, confirmed
+      </div>
+      <div class="tag-row">
+        <span class="tag">Region: East US 2</span>
+        <span class="tag">Address Space: 10.1.0.0/16</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY THESE CHOICES -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// why these choices</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Two subnets from the start, not one</h2>
+      <p>A single flat subnet doesn't demonstrate anything about network segmentation, the actual point of using subnets at all. Splitting into snet-frontend and snet-backend from the outset, even though this lab only builds on the front-end side, sets up the natural next step for a future lab: back-end-tier rules that only accept traffic from the front-end subnet rather than from the internet directly.</p>
+    </div>
+    <div class="content-card">
+      <h2>Subnet-level NSG association instead of NIC-level</h2>
+      <p>Subnet-level association is the more common real-world pattern for a public-facing tier: one NSG governs every resource in that subnet consistently, rather than needing to remember to attach an NSG to every individual NIC as new VMs get added. It also made the later troubleshooting cleaner, since there was only one place the rule could actually be attached, not two possible locations to check.</p>
+    </div>
+    <div class="content-card">
+      <h2>Deploying a real test VM instead of trusting the rule configuration alone</h2>
+      <p>A rule that looks correct in the portal is not the same thing as a rule that is actually enforced. This distinction turned out to matter directly: the Deny-RDP-Inbound rule was accidentally created with its Action field set to Allow, which the rule's name alone gave no indication of. Only a real connection attempt against a real VM exposed the mistake; reading the rule list again would not have.</p>
+    </div>
+  </div>
+
+  <!-- WHAT I BUILT -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i built</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Steps</h2>
+      <p>Built the network, configured and associated the security rules, then proved the rules actually worked by testing against real traffic, including working through a real misconfiguration along the way.</p>
+      <ul class="step-list">
+        <li>Created rg-az104-vnet-nsg and vnet-az104-demo (10.1.0.0/16) with snet-frontend (10.1.1.0/24) and snet-backend (10.1.2.0/24)</li>
+        <li>Created nsg-az104-frontend with two explicit inbound rules: Allow-HTTP-Inbound (priority 100) and Deny-RDP-Inbound (priority 110)</li>
+        <li>Associated nsg-az104-frontend with snet-frontend at the subnet level</li>
+        <li>Deployed vm-az104-nsgtest into snet-frontend, first landing accidentally in the wrong region and wrong auto-generated VNet due to unreviewed wizard defaults, deleted and redeployed with each Networking tab field checked explicitly</li>
+        <li>Attempted an RDP connection to the VM's public IP, which unexpectedly succeeded to a certificate prompt, indicating the Deny rule wasn't actually blocking traffic</li>
+        <li>Diagnosed the issue using the NSG's live rule view (not just the configuration list), discovering Deny-RDP-Inbound's Action field was set to Allow despite its name</li>
+        <li>Corrected the Action field to Deny, retested, and confirmed the connection genuinely failed to establish this time</li>
+        <li>Deleted rg-az104-vnet-nsg in full, removing the VM, VNet, subnets, and NSG together</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// screenshots</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>Evidence</h2>
+      <div class="shot"><img src="img/az104-vnet-nsg/01-vnet-subnets-created.png" alt="Both subnets listed under vnet-az104-demo with their address ranges"></div>
+      <div class="caption">snet-frontend (10.1.1.0/24) and snet-backend (10.1.2.0/24), both live under vnet-az104-demo, 251 available IPs each</div>
+
+      <div class="shot"><img src="img/az104-vnet-nsg/02-nsg-rules-configured.png" alt="Inbound security rules list showing both custom rules alongside Azure's default rules, in priority order"></div>
+      <div class="caption">Allow-HTTP-Inbound (100) and Deny-RDP-Inbound (110) alongside Azure's three default rules (65000, 65001, 65500), rule evaluation order made visible in one list</div>
+
+      <div class="shot"><img src="img/az104-vnet-nsg/03-nsg-associated-with-subnet.png" alt="nsg-az104-frontend's Subnets blade showing snet-frontend associated"></div>
+      <div class="caption">nsg-az104-frontend confirmed associated with snet-frontend, subnet-level association, not NIC-level</div>
+
+      <div class="shot"><img src="img/az104-vnet-nsg/04-traffic-rule-verified.png" alt="Corrected Deny-RDP-Inbound rule next to a failed Remote Desktop Connection attempt"></div>
+      <div class="caption">the real proof: Deny-RDP-Inbound corrected to actually Deny, and a live RDP attempt against the same VM genuinely failing to connect, not just a portal status field claiming success</div>
+
+      <div class="alert"><strong>Note:</strong> the first RDP attempt against this VM unexpectedly reached a certificate prompt rather than failing, which led to discovering that Deny-RDP-Inbound's Action field had been set to Allow at creation. The screenshot above is from the corrected rule and the retest, not the first attempt.</div>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE AS CODE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// infrastructure as code</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <p class="iac-quote">"If you can build it again tomorrow without looking at yesterday's code, you've learned it. If you need to copy and paste it again, you've only completed a tutorial."</p>
+      <p>I am learning Infrastructure as Code deliberately, specifically Terraform and Bicep, rather than treating them as copy-paste snippets. This lab was built through the portal, so the code below is the deliberate as-code equivalent, written to understand the resource model rather than copied from a generated template. Note the Action field on the Deny-RDP-Inbound rule below, exactly the field that was wrong in the portal build; writing it explicitly in code makes that kind of mistake more visible than a form field does.</p>
+    </div>
+    <div class="content-card">
+      <h2>Terraform <span class="badge">.tf</span></h2>
+      <div class="code-block"><span class="comment"># main.tf</span>
+
+resource "azurerm_resource_group" "vnet_nsg" {
+  name     = "rg-az104-vnet-nsg"
+  location = "eastus2"
+}
+
+resource "azurerm_virtual_network" "demo" {
+  name                = "vnet-az104-demo"
+  address_space       = ["10.1.0.0/16"]
+  location             = azurerm_resource_group.vnet_nsg.location
+  resource_group_name  = azurerm_resource_group.vnet_nsg.name
+}
+
+resource "azurerm_subnet" "frontend" {
+  name                 = "snet-frontend"
+  resource_group_name  = azurerm_resource_group.vnet_nsg.name
+  virtual_network_name = azurerm_virtual_network.demo.name
+  address_prefixes     = ["10.1.1.0/24"]
+}
+
+resource "azurerm_subnet" "backend" {
+  name                 = "snet-backend"
+  resource_group_name  = azurerm_resource_group.vnet_nsg.name
+  virtual_network_name = azurerm_virtual_network.demo.name
+  address_prefixes     = ["10.1.2.0/24"]
+}
+
+resource "azurerm_network_security_group" "frontend" {
+  name                = "nsg-az104-frontend"
+  location             = azurerm_resource_group.vnet_nsg.location
+  resource_group_name  = azurerm_resource_group.vnet_nsg.name
+
+  security_rule {
+    name                       = "Allow-HTTP-Inbound"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Deny-RDP-Inbound"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3389"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "frontend" {
+  subnet_id                 = azurerm_subnet.frontend.id
+  network_security_group_id = azurerm_network_security_group.frontend.id
+}
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Bicep <span class="badge">.bicep</span></h2>
+      <p>Bicep's securityRules array makes the access field a required, explicit property on every rule, the exact field that was wrong in this lab's portal build. There's no way to define a rule in code without stating Allow or Deny directly.</p>
+      <div class="code-block"><span class="comment">// main.bicep</span>
+
+resource vnet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
+  name: 'vnet-az104-demo'
+  location: 'eastus2'
+  properties: {
+    addressSpace: {
+      addressPrefixes: ['10.1.0.0/16']
+    }
+    subnets: [
+      {
+        name: 'snet-frontend'
+        properties: { addressPrefix: '10.1.1.0/24' }
+      }
+      {
+        name: 'snet-backend'
+        properties: { addressPrefix: '10.1.2.0/24' }
+      }
+    ]
+  }
+}
+
+resource nsg 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
+  name: 'nsg-az104-frontend'
+  location: 'eastus2'
+  properties: {
+    securityRules: [
+      {
+        name: 'Allow-HTTP-Inbound'
+        properties: {
+          priority: 100
+          direction: 'Inbound'
+          access: 'Allow'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '80'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
+      {
+        name: 'Deny-RDP-Inbound'
+        properties: {
+          priority: 110
+          direction: 'Inbound'
+          access: 'Deny'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '3389'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
+    ]
+  }
+}
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND LINE -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// command line</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <h2>PowerShell</h2>
+      <div class="code-block"><span class="comment"># Connect first: Connect-AzAccount
+# Note: this lab was built via portal; commands below are the equivalent path for a future revisit</span>
+
+New-AzResourceGroup -Name "rg-az104-vnet-nsg" -Location "East US 2"
+
+$frontendSubnet = New-AzVirtualNetworkSubnetConfig -Name "snet-frontend" -AddressPrefix "10.1.1.0/24"
+$backendSubnet  = New-AzVirtualNetworkSubnetConfig -Name "snet-backend" -AddressPrefix "10.1.2.0/24"
+
+New-AzVirtualNetwork -Name "vnet-az104-demo" -ResourceGroupName "rg-az104-vnet-nsg" `
+    -Location "East US 2" -AddressPrefix "10.1.0.0/16" -Subnet $frontendSubnet, $backendSubnet
+
+<span class="comment"># Note the explicit -Access parameter, exactly the field that was wrong in the portal build</span>
+$allowHttp = New-AzNetworkSecurityRuleConfig -Name "Allow-HTTP-Inbound" -Priority 100 `
+    -Direction Inbound -Access Allow -Protocol Tcp -SourcePortRange * -DestinationPortRange 80 `
+    -SourceAddressPrefix * -DestinationAddressPrefix *
+
+$denyRdp = New-AzNetworkSecurityRuleConfig -Name "Deny-RDP-Inbound" -Priority 110 `
+    -Direction Inbound -Access Deny -Protocol Tcp -SourcePortRange * -DestinationPortRange 3389 `
+    -SourceAddressPrefix * -DestinationAddressPrefix *
+
+New-AzNetworkSecurityGroup -Name "nsg-az104-frontend" -ResourceGroupName "rg-az104-vnet-nsg" `
+    -Location "East US 2" -SecurityRules $allowHttp, $denyRdp
+      </div>
+    </div>
+    <div class="content-card">
+      <h2>Azure CLI</h2>
+      <div class="code-block"><span class="comment"># Sign in first: az login</span>
+
+az group create --resource-group rg-az104-vnet-nsg --location eastus2
+
+az network vnet create \
+  --resource-group rg-az104-vnet-nsg \
+  --name vnet-az104-demo \
+  --address-prefix 10.1.0.0/16 \
+  --subnet-name snet-frontend \
+  --subnet-prefix 10.1.1.0/24
+
+az network vnet subnet create \
+  --resource-group rg-az104-vnet-nsg \
+  --vnet-name vnet-az104-demo \
+  --name snet-backend \
+  --address-prefix 10.1.2.0/24
+
+az network nsg create --resource-group rg-az104-vnet-nsg --name nsg-az104-frontend --location eastus2
+
+<span class="comment"># --access is required and explicit, exactly the field that was wrong in the portal build</span>
+az network nsg rule create \
+  --resource-group rg-az104-vnet-nsg \
+  --nsg-name nsg-az104-frontend \
+  --name Allow-HTTP-Inbound \
+  --priority 100 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --destination-port-ranges 80
+
+az network nsg rule create \
+  --resource-group rg-az104-vnet-nsg \
+  --nsg-name nsg-az104-frontend \
+  --name Deny-RDP-Inbound \
+  --priority 110 \
+  --direction Inbound \
+  --access Deny \
+  --protocol Tcp \
+  --destination-port-ranges 3389
+
+az network vnet subnet update \
+  --resource-group rg-az104-vnet-nsg \
+  --vnet-name vnet-az104-demo \
+  --name snet-frontend \
+  --network-security-group nsg-az104-frontend
+
+<span class="comment"># Verify the live, evaluated rule set on a NIC (not just the NSG's own configured list)</span>
+az network nic list-effective-nsg --resource-group rg-az104-vnet-nsg --name <nic-name>
+
+<span class="comment"># Clean up, full resource group</span>
+az group delete --name rg-az104-vnet-nsg --yes --no-wait
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT I LEARNED -->
+  <div class="section">
+    <div class="section-header"><span class="section-label">// what i learned</span><div class="section-line"></div></div>
+    <div class="content-card">
+      <ul class="step-list">
+        <li><strong>A rule's name is documentation, not enforcement.</strong> Deny-RDP-Inbound, set to Allow, still shows up in the rules list looking exactly like a working deny rule at a glance. Only the Action field actually determines behavior. This is the single most transferable lesson from this lab: always verify the Action/Access value directly, on every rule, every time, rather than trusting a well-named rule to mean what it says.</li>
+        <li><strong>Configuration correctness and enforcement correctness are two different checks.</strong> The NSG's rule list, the subnet association, and the priority ordering were all genuinely correct throughout this lab. The actual bug was invisible to every one of those checks and only surfaced through a real connection attempt. Reading configuration is necessary but not sufficient; testing against real traffic is what actually proves a security control works.</li>
+        <li><strong>Multi-tab creation wizards can silently default to the wrong thing more than once in the same lab.</strong> The test VM landed in the wrong region and an auto-generated VNet on the first attempt, purely from clicking through the wizard without checking each tab. This is the same category of mistake as the Windows VM resource-group mixup back in Lab 3.1, a pattern worth actively watching for in every future portal-based lab.</li>
+        <li><strong>Subnet-level NSG association keeps troubleshooting simpler than NIC-level association would.</strong> When the RDP block first appeared not to work, there was only one place to check the association (the subnet), not two possible locations (subnet and NIC) that could each be silently wrong or silently correct in a way that masked the real issue.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">// az-104 lab &middot; <a href="README-az104-vnet-nsg.md" style="color:var(--green);text-decoration:none;">README</a> &middot; <a href="az104-labs.html" style="color:var(--green);text-decoration:none;">&larr; back to az-104 labs</a></div>
+
+</div>
+</body>
+</html>
