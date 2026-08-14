@@ -288,10 +288,7 @@ code.inline { font-family: var(--mono); font-size: 12px; color: var(--green); }
       <div class="shot"><img src="img/az104-load-balancer/04-nsg-default-rules-only.png" alt="Azure CLI output showing an empty custom NSG rule list on vm-az104-lb1-nsg"></div>
       <div class="caption">az network nsg rule list against vm-az104-lb1-nsg returning zero custom rules, only Azure's default AllowVnetInBound, AllowAzureLoadBalancerInBound, and DenyAllInBound apply, confirming why the probe passed while real traffic did not</div>
 
-      <div class="shot"><img src="img/az104-load-balancer/05-nsg-rule-added.png" alt="Azure CLI output confirming the new allow-http-80 rule created on the NSG"></div>
-      <div class="caption">allow-http-80 rule successfully created on vm-az104-lb1-nsg, priority 100, Allow, TCP, port 80, source Internet, the same rule was applied to vm-az104-lb2-nsg</div>
-
-      <div class="shot"><img src="img/az104-load-balancer/06-load-balancer-working.png" alt="Browser showing a successful response from the load balancer's public IP, identifying itself as vm-az104-lb1"></div>
+      <div class="shot"><img src="img/az104-load-balancer/05-load-balancer-working.png" alt="Browser showing a successful response from the load balancer's public IP, identifying itself as vm-az104-lb1"></div>
       <div class="caption">http://172.175.19.131 loading successfully after the NSG fix, response correctly identifies vm-az104-lb1 as the backend instance that served the request</div>
     </div>
   </div>
